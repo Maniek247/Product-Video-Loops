@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>productvideoloops</name>
+    <displayName><![CDATA[Product Video Loops]]></displayName>
+    <version><![CDATA[1.0.0]]></version>
+    <description><![CDATA[Product Video Loops module description]]></description>
+    <author><![CDATA[Adam Mańko]]></author>
+    <tab><![CDATA[]]></tab>
+    <is_configurable>0</is_configurable>
+    <need_instance>1</need_instance>
+</module>

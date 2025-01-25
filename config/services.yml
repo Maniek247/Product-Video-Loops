@@ -1,0 +1,24 @@
+# https://devdocs.prestashop.com/8/modules/concepts/services/
+services:
+    PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier:
+        autowire: true
+        public: true
+        arguments:
+            $formBuilderModifier: '@form.form_builder_modifier'
+
+    PrestaShop\Module\ProductVideoLoops\Form\Modifier\CombinationFormModifier:
+        autowire: true
+        public: true
+        arguments:
+            $formBuilderModifier: '@form.form_builder_modifier'
+
+    PrestaShop\Module\ProductVideoLoops\CQRS\CommandHandler\UpdateCustomProductCommandHandler:
+        class: PrestaShop\Module\ProductVideoLoops\CQRS\CommandHandler\UpdateCustomProductCommandHandler
+        tags:
+            - name: tactician.handler
+              command: PrestaShop\Module\ProductVideoLoops\CQRS\Command\UpdateCustomProductCommand
+
+    PrestaShop\Module\ProductVideoLoops\CQRS\CommandBuilder\CustomProductCommandsBuilder:
+        class: PrestaShop\Module\ProductVideoLoops\CQRS\CommandBuilder\CustomProductCommandsBuilder
+        # This tag is important. Core product command builder finds this builder by the tag
+        tags: ['core.product_command_builder']
