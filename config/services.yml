@@ -12,13 +12,35 @@ services:
         arguments:
             $formBuilderModifier: '@form.form_builder_modifier'
 
-    PrestaShop\Module\ProductVideoLoops\CQRS\CommandHandler\UpdateCustomProductCommandHandler:
-        class: PrestaShop\Module\ProductVideoLoops\CQRS\CommandHandler\UpdateCustomProductCommandHandler
+    PrestaShop\Module\ProductVideoLoops\CQRS\CommandHandler\AddProductVideoCommandHandler:
+        class: PrestaShop\Module\ProductVideoLoops\CQRS\CommandHandler\AddProductVideoCommandHandler
+        arguments:
+            - '@PrestaShop\Module\ProductVideoLoops\Service\VideoManagementService'
         tags:
             - name: tactician.handler
-              command: PrestaShop\Module\ProductVideoLoops\CQRS\Command\UpdateCustomProductCommand
+              command: PrestaShop\Module\ProductVideoLoops\CQRS\Command\AddProductVideoCommand
 
-    PrestaShop\Module\ProductVideoLoops\CQRS\CommandBuilder\CustomProductCommandsBuilder:
-        class: PrestaShop\Module\ProductVideoLoops\CQRS\CommandBuilder\CustomProductCommandsBuilder
+    PrestaShop\Module\ProductVideoLoops\CQRS\CommandBuilder\ProductVideoCommandsBuilder:
+        class: PrestaShop\Module\ProductVideoLoops\CQRS\CommandBuilder\ProductVideoCommandsBuilder
+        public: true
+        autowire: true
         # This tag is important. Core product command builder finds this builder by the tag
-        tags: ['core.product_command_builder']
+        tags: 
+            - 'core.product_command_builder'
+
+    PrestaShop\Module\ProductVideoLoops\Service\VideoManagementService:
+        public: true
+        autowire: true
+        arguments:
+            $videoUploader: '@productvideoloops.services.video_uploader'
+            $productVideoRepository: '@productvideoloops.services.video_repository'
+
+    productvideoloops.services.video_uploader:
+        class: 'PrestaShop\Module\ProductVideoLoops\Service\VideoUploader'
+        arguments:
+            - '@productvideoloops.services.video_repository'
+
+    productvideoloops.services.video_repository:
+        class: 'PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
+        public: true
+        autowire: true

@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace PrestaShop\Module\ProductVideoLoops\CQRS\CommandBuilder;
 
 use PrestaShop\PrestaShop\Core\Domain\Product\ValueObject\ProductId;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use PrestaShop\PrestaShop\Core\Domain\Shop\ValueObject\ShopConstraint;
-use PrestaShop\Module\ProductVideoLoops\CQRS\Command\UpdateCustomProductCommand;
+use PrestaShop\Module\ProductVideoLoops\CQRS\Command\AddProductVideoCommand;
 use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\CommandBuilder\Product\ProductCommandsBuilderInterface;
 
 /**
@@ -19,24 +20,16 @@ use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\CommandBuilder\Product\Pr
  *  - actionAfterUpdateProductFormHandler
  *  - actionBeforeUpdateProductFormHandler
  */
-final class CustomProductCommandsBuilder implements ProductCommandsBuilderInterface
+final class ProductVideoCommandsBuilder implements ProductCommandsBuilderInterface
 {
     public function buildCommands(ProductId $productId, array $formData, ShopConstraint $singleShopConstraint): array
-    {
+    {        
         $command = null;
-        if (isset($formData['description']['product_video_field'])) {
-            $command = $this->getCommand($command, $productId->getValue())->setCustomerField($formData['description']['product_video_field']);
-        } 
-        
-        return null !== $command ? [$command] : [];
-    }
-
-    private function getCommand(?UpdateCustomProductCommand $existingCommand, int $productId): UpdateCustomProductCommand
-    {
-        if (null !== $existingCommand) {
-            return $existingCommand;
+        if (isset($formData['description']['video']) && $formData['description']['video'] instanceof UploadedFile) {
+            $uploadedFile = $formData['description']['video'];
+            $command = new AddProductVideoCommand($productId->getValue(), $uploadedFile);
         }
-
-        return new UpdateCustomProductCommand($productId);
+        
+        return null !== $command ? [$command] : []; 
     }
 }

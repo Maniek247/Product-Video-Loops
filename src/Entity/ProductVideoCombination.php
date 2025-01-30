@@ -3,19 +3,29 @@
 namespace PrestaShop\Module\ProductVideoLoops\Entity;
 
 /**
- * Example object model for module custom product fields
+ * Object model for product video combination fields
  */
-final class CustomProduct extends \ObjectModel
+final class ProductVideoCombination extends \ObjectModel
 {
     /**
      * @var int
      */
-    public $id;
+    public $id_product;
 
     /**
      * @var string
      */
     public $filename = '';
+
+    /**
+     * @var bool
+     */
+    public $cover;
+
+    /**
+     * @var int
+     */
+    public $position;
 
     /**
      * @var string
@@ -34,9 +44,11 @@ final class CustomProduct extends \ObjectModel
 
     public static $definition = [
         'table' => 'productvideoloops',
-        'primary' => 'id',
+        'primary' => 'id_product',
         'fields' => [
-            'filename' => ['type' => self::TYPE_STRING],
+            'filename' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'cover' => ['type' => self::TYPE_BOOL, 'validate' => 'isBool'],
+            'position' => ['type' => self::TYPE_INT, 'validate' => 'isInt'],
             'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
             'date_upd' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
         ],

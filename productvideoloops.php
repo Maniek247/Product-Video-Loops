@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use PrestaShop\Module\ProductVideoLoops\Entity\CustomCombination;
-use PrestaShop\Module\ProductVideoLoops\Entity\CustomProduct;
+use PrestaShop\Module\ProductVideoLoops\Entity\ProductVideo;
 use PrestaShop\Module\ProductVideoLoops\Form\Modifier\CombinationFormModifier;
 use PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier;
 use PrestaShop\Module\ProductVideoLoops\Install\Installer;
@@ -71,20 +71,6 @@ class ProductVideoLoops extends Module
     }
 
     /**
-     * Modify product form builder
-     *
-     * @param array $params
-     */
-    public function hookActionProductFormBuilderModifier(array $params): void
-    {
-        /** @var ProductFormModifier $productFormModifier */
-        $productFormModifier = $this->get(ProductFormModifier::class);
-        $productId = isset($params['id']) ? new ProductId((int) $params['id']) : null;
-
-        $productFormModifier->modify($productId, $params['form_builder']);
-    }
-
-    /**
      * Hook to display configuration related to the module in the Modules extra tab in product page.
      *
      * @param array $params
@@ -96,15 +82,29 @@ class ProductVideoLoops extends Module
     public function hookDisplayAdminProductsExtra(array $params): string
     {
         $productId = $params['id_product'];
-        $customProduct = new CustomProduct($productId);
+        $productVideo = new ProductVideo($productId);
 
         /** @var EngineInterface $twig */
         
         $twig = $this->get('twig');
 
         return $twig->render('@Modules/productvideoloops/views/templates/admin/product_video_module.html.twig', [
-            'customProduct' => $customProduct,
+            'productVideo' => $productVideo,
         ]);
+    }
+
+    /**
+     * Modify product form builder
+     *
+     * @param array $params
+     */
+    public function hookActionProductFormBuilderModifier(array $params): void
+    {
+        /** @var ProductFormModifier $productFormModifier */
+        $productFormModifier = $this->get(ProductFormModifier::class);
+       // $productId = isset($params['id']) ? new ProductId((int) $params['id']) : null;
+
+        $productFormModifier->modify(/* $productId, */$params['form_builder']);
     }
 
     /**
@@ -116,9 +116,9 @@ class ProductVideoLoops extends Module
     { 
         /** @var CombinationFormModifier $productFormModifier */
         $productFormModifier = $this->get(CombinationFormModifier::class);
-        $combinationId = isset($params['id']) ? new CombinationId((int) $params['id']) : null;
+       // $combinationId = isset($params['id']) ? new CombinationId((int) $params['id']) : null;
 
-        $productFormModifier->modify($combinationId, $params['form_builder']);
+        $productFormModifier->modify(/* $combinationId, */$params['form_builder']);
     }
 
     /**
@@ -128,9 +128,9 @@ class ProductVideoLoops extends Module
      */
     public function hookActionAfterUpdateCombinationFormFormHandler(array $params): void
     {
-        $combinationId = $params['form_data']['id'];
+        /* $combinationId = $params['form_data']['id'];
         $customCombination = new CustomCombination($combinationId);
-        $customCombination->filename = $params['form_data']['demo_module_custom_field'] ?? '';
+        $customCombination->filename = $params['form_data']['video'] ?? '';
 
         if (empty($customCombination->id)) {
             // If custom is not found it has not been created yet, so we force its ID to match the combination ID
@@ -139,11 +139,20 @@ class ProductVideoLoops extends Module
             $customCombination->add();
         } else {
             $customCombination->update();
-        }
+        } */
     }
 
     public function hookActionAfterUpdateProductFormHandler(array $params): void
     {
-        return;
-    }
+    /*
+        $productId = (int) $params['id_product'];
+        $formData = $params['form_data'];
+
+        if (isset($formData['description']['video']) && !empty($formData['description']['video'])) {
+            */   /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $uploadedFile */
+      /*     $uploadedFile = $formData['description']['video'];
+
+            $this->get('productvideoloops.services.video_uploader')->upload($uploadedFile, $productId);
+        }*/
+    }  
 }
