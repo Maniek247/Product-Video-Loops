@@ -33,7 +33,7 @@ final class FrontControllerHookSubscriber
             return;
         }
     
-        /*'presentedProduct' chyba nie jest tablicą, tylko obiektem Lazyxxxx
+        /*'presentedProduct' chyba nie jest tablicą, tylko obiektem LazyArray
         Na końcu tego kodu pojawiły się problemy z operacją przesunięcia tablicy - do weryfikacji */
         $presentedProduct = &$params['presentedProduct'];
 
@@ -51,16 +51,16 @@ final class FrontControllerHookSubscriber
         if (!$productVideo) {
             return;
         }
-        echo '<pre>';
-        var_dump($productVideo);
-        echo '</pre>';
+        //echo '<pre>';
+        //var_dump($productVideo);
+        //echo '</pre>';
 
-        // URL do obrazka zastępczego dla wideo (thumbnail)
+        // URL do obrazka zastępczego do wideo (thumbnail)
         $videoThumb = 'https://adamdebesciak.eu/img/videoloops/dodge%20felgi.jpg';
 
         // VideoArray + inne klucze wymagane przez szablony(bySize, small, medium, large)
         $videoArray = [
-            'id_image'  => $idProduct,
+            'id_image'  => 'video_' . $idProduct,
             'legend'    => 'Product video',
             'position'  => 1,
             'cover'     => 1,
@@ -135,7 +135,7 @@ final class FrontControllerHookSubscriber
         // Element video idzie na początek tablicy zdjęć
         array_unshift($images, $videoArray);
 
-        // Przypisanie tymczasowej tablicy do tablicy głównej
+        // Przypisanie tymczasowej tablicy do obiektu LazyArray
         $presentedProduct['images'] = $images;
         echo '<pre>';
         echo '<p>shift</p>';
@@ -149,10 +149,7 @@ final class FrontControllerHookSubscriber
 
     private function buildVideoUrl(string $filename): string
     {
-        // Załóżmy, że uploadujesz do /img/videoloops/
-        // Dla pewności użyj linku wygenerowanego przez Link::getBaseLink() itp., 
-        // albo stwórz proste:
-        // dokończyć budowę tego: $baseLink = Link::getBaseLink();
+        // TODO: generowanie linka z odpowiednim http/https
         return _PS_BASE_URL_.__PS_BASE_URI__.'img/videoloops/'.$filename;
     }
 }
