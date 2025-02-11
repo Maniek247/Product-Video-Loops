@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use PrestaShop\Module\ProductVideoLoops\Entity\CustomCombination;
-use PrestaShop\Module\ProductVideoLoops\Entity\ProductVideo;
-use PrestaShop\Module\ProductVideoLoops\Form\Modifier\CombinationFormModifier;
-use PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier;
 use PrestaShop\Module\ProductVideoLoops\Install\Installer;
-use PrestaShop\PrestaShop\Core\Domain\Product\Combination\ValueObject\CombinationId;
-use PrestaShop\PrestaShop\Core\Domain\Product\ValueObject\ProductId;
+use PrestaShop\Module\ProductVideoLoops\Entity\ProductVideo;
 use Symfony\Component\Templating\EngineInterface;
+use PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier;
+use PrestaShop\Module\ProductVideoLoops\Form\Modifier\CombinationFormModifier;
+use PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository;
+use PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler;
+use PrestaShop\Module\ProductVideoLoops\Subscriber\FrontControllerHookSubscriber;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -122,37 +122,16 @@ class ProductVideoLoops extends Module
     }
 
     /**
-     * Hook called after form is submitted and combination is updated, custom data is updated here.
+     * Modifies product data before page final render.
      *
      * @param array $params
      */
-    public function hookActionAfterUpdateCombinationFormFormHandler(array $params): void
+    public function hookActionPresentProduct(array $params): void
     {
-        /* $combinationId = $params['form_data']['id'];
-        $customCombination = new CustomCombination($combinationId);
-        $customCombination->filename = $params['form_data']['video'] ?? '';
+        $repo = new ProductVideoRepository();
+        $handler = new GetProductVideoQueryHandler($repo);
 
-        if (empty($customCombination->id)) {
-            // If custom is not found it has not been created yet, so we force its ID to match the combination ID
-            $customCombination->id = $combinationId;
-            $customCombination->force_id = true;
-            $customCombination->add();
-        } else {
-            $customCombination->update();
-        } */
+        $subscriber = new FrontControllerHookSubscriber($handler);
+        $subscriber->onActionPresentProduct($params);
     }
-
-    public function hookActionAfterUpdateProductFormHandler(array $params): void
-    {
-    /*
-        $productId = (int) $params['id_product'];
-        $formData = $params['form_data'];
-
-        if (isset($formData['description']['video']) && !empty($formData['description']['video'])) {
-            */   /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $uploadedFile */
-      /*     $uploadedFile = $formData['description']['video'];
-
-            $this->get('productvideoloops.services.video_uploader')->upload($uploadedFile, $productId);
-        }*/
-    }  
 }
