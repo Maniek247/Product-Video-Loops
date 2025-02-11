@@ -52,9 +52,10 @@ class Installer
         $hooks = [
             'actionProductFormBuilderModifier',
             'actionCombinationFormFormBuilderModifier',
-            'actionAfterUpdateCombinationFormFormHandler',
-            'actionAfterUpdateProductFormHandler',
             'displayAdminProductsExtra',
+            'actionPresentProduct',
+            'displayProductAdditionalInfo',
+            'displayOverrideTemplate',
         ];
 
         return (bool) $module->registerHook($hooks);
