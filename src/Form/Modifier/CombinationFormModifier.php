@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PrestaShop\Module\ProductVideoLoops\Form\Modifier;
 
-use PrestaShop\Module\ProductVideoLoops\Entity\ProductVideoCombination;
 use PrestaShop\PrestaShop\Core\Domain\Product\Combination\ValueObject\CombinationId;
 use PrestaShopBundle\Form\FormBuilderModifier;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
