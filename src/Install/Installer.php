@@ -54,8 +54,6 @@ class Installer
             'actionCombinationFormFormBuilderModifier',
             'displayAdminProductsExtra',
             'actionPresentProduct',
-            'displayProductAdditionalInfo',
-            'displayOverrideTemplate',
         ];
 
         return (bool) $module->registerHook($hooks);
