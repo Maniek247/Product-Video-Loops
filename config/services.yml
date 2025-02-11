@@ -1,14 +1,14 @@
-# https://devdocs.prestashop.com/8/modules/concepts/services/
 services:
     PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier:
-        autowire: true
+        class: PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier
         public: true
+        autowire: true
         arguments:
             $formBuilderModifier: '@form.form_builder_modifier'
 
     PrestaShop\Module\ProductVideoLoops\Form\Modifier\CombinationFormModifier:
-        autowire: true
         public: true
+        autowire: true
         arguments:
             $formBuilderModifier: '@form.form_builder_modifier'
 
@@ -28,19 +28,34 @@ services:
         tags: 
             - 'core.product_command_builder'
 
+    PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler:
+        class: PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler
+        arguments:
+            - '@PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
+
     PrestaShop\Module\ProductVideoLoops\Service\VideoManagementService:
         public: true
         autowire: true
         arguments:
-            $videoUploader: '@productvideoloops.services.video_uploader'
-            $productVideoRepository: '@productvideoloops.services.video_repository'
+            $videoUploader: '@PrestaShop\Module\ProductVideoLoops\Service\VideoUploader'
+            $productVideoRepository: '@PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
 
-    productvideoloops.services.video_uploader:
-        class: 'PrestaShop\Module\ProductVideoLoops\Service\VideoUploader'
+    PrestaShop\Module\ProductVideoLoops\Service\VideoUploader:
+    # productvideoloops.services.video_uploader:
+        class: PrestaShop\Module\ProductVideoLoops\Service\VideoUploader
         arguments:
-            - '@productvideoloops.services.video_repository'
+            - '@PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
 
-    productvideoloops.services.video_repository:
-        class: 'PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
+    PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository:
+    # productvideoloops.services.video_repository:
+        class: PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository
         public: true
         autowire: true
+
+    # PrestaShop\Module\ProductVideoLoops\Subscriber\FrontControllerHookSubscriber:
+    # productvideoloops.hook_subscriber.front_controller:
+    #    class: PrestaShop\Module\ProductVideoLoops\Subscriber\FrontControllerHookSubscriber
+    #    public: true
+    #    autowire: true
+    #    arguments:
+    #        - '@PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler'
