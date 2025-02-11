@@ -51,11 +51,3 @@ services:
         class: PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository
         public: true
         autowire: true
-
-    # PrestaShop\Module\ProductVideoLoops\Subscriber\FrontControllerHookSubscriber:
-    # productvideoloops.hook_subscriber.front_controller:
-    #    class: PrestaShop\Module\ProductVideoLoops\Subscriber\FrontControllerHookSubscriber
-    #    public: true
-    #    autowire: true
-    #    arguments:
-    #        - '@PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler'
