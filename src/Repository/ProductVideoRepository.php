@@ -32,4 +32,16 @@ final class ProductVideoRepository
             $videoObj->update();
         }
     }
+
+    public function getProductVideo(int $productId): ?ProductVideo
+    {
+        $video = new ProductVideo($productId);
+        
+        if (empty($video->id)) {
+            return null;
+        }
+
+        return $video;
+    }
+
 }
