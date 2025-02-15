@@ -10,6 +10,7 @@ use PrestaShop\Module\ProductVideoLoops\Form\Modifier\CombinationFormModifier;
 use PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository;
 use PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler;
 use PrestaShop\Module\ProductVideoLoops\Subscriber\FrontControllerHookSubscriber;
+use PrestaShop\Module\ProductVideoLoops\Subscriber\ProductsListingHookSubscriber;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -83,6 +84,7 @@ class ProductVideoLoops extends Module
     {
         $productId = $params['id_product'];
         $productVideo = new ProductVideo($productId);
+        //$imgDir = _PS_BASE_URL_.__PS_BASE_URI__.'img/';
 
         /** @var EngineInterface $twig */
         
@@ -90,6 +92,7 @@ class ProductVideoLoops extends Module
 
         return $twig->render('@Modules/productvideoloops/views/templates/admin/product_video_module.html.twig', [
             'productVideo' => $productVideo,
+        //    'imgDir' => $imgDir,
         ]);
     }
 
@@ -133,5 +136,19 @@ class ProductVideoLoops extends Module
 
         $subscriber = new FrontControllerHookSubscriber($handler);
         $subscriber->onActionPresentProduct($params);
+    }
+
+    /**
+     * Modifies product data before page final render.
+     *
+     * @param array $params
+     */
+    public function hookActionPresentProductListing(array $params): void
+    {
+        $repo = new ProductVideoRepository();
+        $handler = new GetProductVideoQueryHandler($repo);
+
+        $subscriber = new ProductsListingHookSubscriber($handler);
+        $subscriber->onActionPresentProductListing($params);
     }
 }

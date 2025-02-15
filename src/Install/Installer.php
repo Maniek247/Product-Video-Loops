@@ -54,6 +54,7 @@ class Installer
             'actionCombinationFormFormBuilderModifier',
             'displayAdminProductsExtra',
             'actionPresentProduct',
+            'actionPresentProductListing',
         ];
 
         return (bool) $module->registerHook($hooks);
