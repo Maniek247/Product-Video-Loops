@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PrestaShop\Module\ProductVideoLoops\Install\Installer;
 use PrestaShop\Module\ProductVideoLoops\Entity\ProductVideo;
+use PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory;
 use Symfony\Component\Templating\EngineInterface;
 use PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier;
 use PrestaShop\Module\ProductVideoLoops\Form\Modifier\CombinationFormModifier;
@@ -82,9 +83,12 @@ class ProductVideoLoops extends Module
      */
     public function hookDisplayAdminProductsExtra(array $params): string
     {
+        /** @var ProductVideoFactory $productVideoFactory */
+        $productVideoFactory = $this->get(ProductVideoFactory::class);
+
         $productId = $params['id_product'];
-        $productVideo = new ProductVideo($productId);
-        //$imgDir = _PS_BASE_URL_.__PS_BASE_URI__.'img/';
+        $productVideo = $productVideoFactory->createProductVideo($productId);
+        $imgDir = _PS_BASE_URL_.__PS_BASE_URI__.'img/';
 
         /** @var EngineInterface $twig */
         
@@ -92,7 +96,7 @@ class ProductVideoLoops extends Module
 
         return $twig->render('@Modules/productvideoloops/views/templates/admin/product_video_module.html.twig', [
             'productVideo' => $productVideo,
-        //    'imgDir' => $imgDir,
+            'imgDir' => $imgDir,
         ]);
     }
 
@@ -105,9 +109,9 @@ class ProductVideoLoops extends Module
     {
         /** @var ProductFormModifier $productFormModifier */
         $productFormModifier = $this->get(ProductFormModifier::class);
-       // $productId = isset($params['id']) ? new ProductId((int) $params['id']) : null;
+        $idProduct = !empty($params['id']) ? (int) $params['id'] : null;
 
-        $productFormModifier->modify(/* $productId, */$params['form_builder']);
+        $productFormModifier->modify($idProduct, $params['form_builder']);
     }
 
     /**
@@ -131,7 +135,9 @@ class ProductVideoLoops extends Module
      */
     public function hookActionPresentProduct(array $params): void
     {
-        $repo = new ProductVideoRepository();
+        $productVideoFactory = new ProductVideoFactory();
+        
+        $repo = new ProductVideoRepository($productVideoFactory);
         $handler = new GetProductVideoQueryHandler($repo);
 
         $subscriber = new FrontControllerHookSubscriber($handler);
@@ -145,7 +151,9 @@ class ProductVideoLoops extends Module
      */
     public function hookActionPresentProductListing(array $params): void
     {
-        $repo = new ProductVideoRepository();
+        $productVideoFactory = new ProductVideoFactory();
+
+        $repo = new ProductVideoRepository($productVideoFactory);
         $handler = new GetProductVideoQueryHandler($repo);
 
         $subscriber = new ProductsListingHookSubscriber($handler);
