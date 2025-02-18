@@ -55,6 +55,7 @@ class Installer
             'displayAdminProductsExtra',
             'actionPresentProduct',
             'actionPresentProductListing',
+            'actionAdminControllerSetMedia',
         ];
 
         return (bool) $module->registerHook($hooks);
