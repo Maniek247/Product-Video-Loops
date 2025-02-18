@@ -1,0 +1,40 @@
+{% block video_compound_widget %}
+    <div class="form-group video-compound-container">
+        {# Lewa kolumna: podgląd video #}
+        <div class="video-left">
+            {% if form.preview.vars.value %}
+                <div class="video-preview">
+                    {{ form.preview.vars.value|raw }}
+                </div>
+                <a href="#"
+                   class="delete-video tooltip-link"
+                   data-toggle="pstooltip"
+                   title="Delete"
+                   data-placement="right">
+                    <i class="material-icons">delete</i>
+                </a>
+            {% else %}
+                <div class="video-placeholder">
+                    <em>Brak wideo</em>
+                </div>
+            {% endif %}
+        </div>
+
+        {# Prawa kolumna: formularz upload #}
+        <div class="video-right">
+            <label>{{ form_label(form.file) }}</label>
+            <div>
+                {{ form_widget(form.file) }}
+            </div>
+        </div>
+
+        {# Ikona help box #}
+        <span class="help-box"
+              data-toggle="popover"
+              data-content="Upload mp4 video type with max size of 5mb"
+              data-original-title=""
+              data-trigger="hover"
+              title="">
+        </span>
+    </div>
+{% endblock %}
