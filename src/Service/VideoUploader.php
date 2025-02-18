@@ -6,6 +6,7 @@ namespace PrestaShop\Module\ProductVideoLoops\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use PrestaShopException;
 
 class VideoUploader
@@ -16,21 +17,34 @@ class VideoUploader
     {
         $this->productVideoRepository = $productVideoRepository;
     }
-
     /**
-     * @param UploadedFile $uploadedFile
-     * @param int $productId
+     * Uploads a video file.
      *
-     * @return void
-     * @throws PrestaShopException
+     * Validates that the uploaded file is in the allowed format, generates a safe and unique
+     * file name based on the original name using a slugger. Then moves the file to destination directory.
+     * Attemps to create destination directory if it does not exist.
+     *
+     * @param UploadedFile $uploadedFile
+     * @param AsciiSlugger $slugger Generates URL-friendly file name
+     *
+     * @return string Unique and safe final file name
+     * @throws PrestaShopException If invalid format or destination directory cannot be created
      */
-    public function upload(UploadedFile $uploadedFile): string
+    public function upload(UploadedFile $uploadedFile, AsciiSlugger $slugger): string
     {
-        // 1. Wygeneruj nazwę pliku (możesz dodać slug, timestamp, cokolwiek)
-        // np. oryginalna_nazwa + ID produktu
-        $originalName = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+
+        $allowedExtensions = 'mp4';
         $extension = $uploadedFile->guessExtension();
-        $safeFileName = uniqid() . '-' . $originalName . '.' . $extension;
+        //TODO: test this exception
+        if ($extension != $allowedExtensions) {
+            throw new PrestaShopException('Nieprawidłowy format pliku.');
+        }
+
+        $originalName = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeName = $slugger->slug($originalName);
+        $safeName = mb_substr($safeName, 0, 70);
+        $extension = $uploadedFile->guessExtension();
+        $finalFileName = uniqid() . '-' . $safeName . '.' . $extension;
 
         $destination = _PS_CORE_IMG_DIR_ . 'videoloops/';
 
@@ -38,10 +52,14 @@ class VideoUploader
             @mkdir($destination, 0777, true);
         }
 
-        $uploadedFile->move($destination, $safeFileName);
+        //TODO: test this exception
+        if (!is_dir($destination) && !mkdir($destination, 0777, true) && !is_dir($destination)) {
+            throw new PrestaShopException('Nie można utworzyć katalogu docelowego.');
+        }
 
-        return $safeFileName;
-        // 4. Zapisz informację w bazie (Twoja tabela `productvideoloops`)
-        // $this->productVideoRepository->saveVideoInfoToDb($productId, $safeFileName);
+
+        $uploadedFile->move($destination, $finalFileName);
+
+        return $finalFileName;
     }
 }
