@@ -25,8 +25,9 @@ final class ProductVideoCommandsBuilder implements ProductCommandsBuilderInterfa
     public function buildCommands(ProductId $productId, array $formData, ShopConstraint $singleShopConstraint): array
     {        
         $command = null;
-        if (isset($formData['description']['video']) && $formData['description']['video'] instanceof UploadedFile) {
-            $uploadedFile = $formData['description']['video'];
+        if (isset($formData['description']['video_block']['file']) 
+            && $formData['description']['video_block']['file'] instanceof UploadedFile) {
+            $uploadedFile = $formData['description']['video_block']['file'];
             $command = new AddProductVideoCommand($productId->getValue(), $uploadedFile);
         }
         
