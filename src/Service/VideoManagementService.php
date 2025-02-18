@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PrestaShop\Module\ProductVideoLoops\Service;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository;
 use PrestaShop\Module\ProductVideoLoops\Service\VideoUploader;
+use PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class VideoManagementService
 {
@@ -23,10 +23,8 @@ final class VideoManagementService
 
     public function addVideoToProduct(int $productId, UploadedFile $file): void
     {
-        // 1. Upload pliku - dostaniemy finalną nazwę
         $filename = $this->videoUploader->upload($file);
 
-        // 2. Zapis w bazie
         $this->productVideoRepository->saveVideoInfoToDb($productId, $filename);
     }
 }
