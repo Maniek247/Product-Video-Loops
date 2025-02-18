@@ -20,7 +20,7 @@ final class FrontControllerHookSubscriber
     }
 
     /**
-     * Logika obsługująca hook 'actionPresentProduct'.
+     * ActionPresentProduct hook logic
      *
      * @param array $params
      */
@@ -33,14 +33,17 @@ final class FrontControllerHookSubscriber
             return;
         }
     
-        /*'presentedProduct' chyba nie jest tablicą, tylko obiektem LazyArray
+        /*TODO: 'presentedProduct' chyba nie jest tablicą, tylko obiektem LazyArray
         Na końcu tego kodu pojawiły się problemy z operacją przesunięcia tablicy - do weryfikacji */
         $presentedProduct = &$params['presentedProduct'];
 
+        //echo '<pre>';
+        //var_dump($presentedProduct);
+        //echo '</pre>';
         if (!isset($presentedProduct['id_product'])) {
             return;
         }
-        $idProduct = (int) $presentedProduct['id_product'];
+        $idProduct = (int)$presentedProduct['id_product'];
         //echo '<pre>';
         //var_dump($idProduct);
         //echo '</pre>';
@@ -55,58 +58,67 @@ final class FrontControllerHookSubscriber
         //var_dump($productVideo);
         //echo '</pre>';
 
-        // URL do obrazka zastępczego do wideo (thumbnail)
-        $videoThumb = 'https://adamdebesciak.eu/img/videoloops/dodge%20felgi.jpg';
-
-        // VideoArray + inne klucze wymagane przez szablony(bySize, small, medium, large)
         $videoArray = [
-            'id_image'  => 'video_' . $idProduct,
-            'legend'    => 'Product video',
-            'position'  => 1,
-            'cover'     => 1,
-            'is_video'  => true,
-            'video_url' => 'https://adamdebesciak.eu/img/videoloops/67a34dc77a4f9-Make_perfect_jewellery_product_ad_seed723238620.mp4', //$this->buildVideoUrl($productVideo->filename),
-            // Klucze potrzebne przez inne pliki tpl
-            'bySize'    => [
+            'cover' => 1,
+            'id_image' => 777,
+            'legend' => 'Product video',
+            'position' => 1,
+            // Some templates may need jpg thumbnail in cart, invoice etc. so it can be passed below in arrays if needed
+            'bySize' => [
                 'small_default' => [
-                    'url'     => $videoThumb,
+                    'url'     => '',
                     'width'   => 98,
                     'height'  => 98,
-                    'sources' => []
+                    'sources' => [],
                 ],
-                'medium_default' => [
-                    'url'     => $videoThumb,
+                'cart_default' => [
+                    'url'     => '',
+                    'width'   => 125,
+                    'height'  => 125,
+                    'sources' => [],
+                ],
+                'home_default' => [
+                    'url'     => '',
                     'width'   => 250,
                     'height'  => 250,
-                    'sources' => []
+                    'sources' => [],
+                ],
+                'medium_default' => [
+                    'url'     => '',
+                    'width'   => 452,
+                    'height'  => 452,
+                    'sources' => [],
                 ],
                 'large_default' => [
-                    'url'     => $videoThumb,
+                    'url'     => '',
                     'width'   => 800,
                     'height'  => 800,
-                    'sources' => []
+                    'sources' => [],
                 ],
             ],
-            'small'  => [
-                'url'     => $videoThumb,
+            'small' => [
+                'url'     => '',
                 'width'   => 98,
                 'height'  => 98,
-                'sources' => []
+                'sources' => [],
             ],
             'medium' => [
-                'url'     => $videoThumb,
+                'url'     => '',
                 'width'   => 250,
                 'height'  => 250,
-                'sources' => []
+                'sources' => [],
             ],
-            'large'  => [
-                'url'     => $videoThumb,
+            'large' => [
+                'url'     => '',
                 'width'   => 800,
                 'height'  => 800,
-                'sources' => []
+                'sources' => [],
             ],
-        ];
-
+            'associatedVariants' => [],
+            'is_video'  => true,
+            'video_url' => 'https://adamdebesciak.eu/img/videoloops/67a34dc77a4f9-Make_perfect_jewellery_product_ad_seed723238620.mp4',  //TODO: Link builder method
+        ];       
+        
         // Pobranie zdjęć do tymczasowej tablicy
         $images = $presentedProduct['images'];
         if (!is_array($images)) {
@@ -114,7 +126,7 @@ final class FrontControllerHookSubscriber
         }
         //echo '<pre>';
         //echo '<p>shift</p>';
-        //var_dump($images['position']);
+        //var_dump($images);
         //echo '</pre>';
 
         // przesunięcie w tablicy zdjęć
@@ -137,14 +149,8 @@ final class FrontControllerHookSubscriber
 
         // Przypisanie tymczasowej tablicy do obiektu LazyArray
         $presentedProduct['images'] = $images;
-        echo '<pre>';
-        echo '<p>shift</p>';
-        var_dump($presentedProduct['images']);
-        echo '</pre>';
-        $presentedProduct['default_image'];
-        echo '<pre>';
-        var_dump($presentedProduct['default_image']);
-        echo '</pre>';
+
+        $presentedProduct['default_image'] = $videoArray;
     }
 
     private function buildVideoUrl(string $filename): string

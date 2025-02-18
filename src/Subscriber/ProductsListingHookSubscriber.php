@@ -20,7 +20,7 @@ final class ProductsListingHookSubscriber
     }
 
     /**
-     * Logika obsługująca hook 'actionPresentProductListing'.
+     * ActionPresentProductListing hook logic
      *
      * @param array $params
      */
@@ -56,7 +56,7 @@ final class ProductsListingHookSubscriber
         }*/
 
         $cover['is_video'] = true;
-        $cover['video_url'] = 'https://adamdebesciak.eu/img/videoloops/67a34dc77a4f9-Make_perfect_jewellery_product_ad_seed723238620.mp4';
+        $cover['video_url'] = 'https://adamdebesciak.eu/img/videoloops/67a34dc77a4f9-Make_perfect_jewellery_product_ad_seed723238620.mp4'; //TODO: Link builder method
 
         $presentedProduct['cover'] = $cover;
         //echo '<pre>';
