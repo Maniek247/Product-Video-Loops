@@ -5,17 +5,27 @@ declare(strict_types=1);
 namespace PrestaShop\Module\ProductVideoLoops\Repository;
 
 use PrestaShop\Module\ProductVideoLoops\Entity\ProductVideo;
+use PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory;
 
 final class ProductVideoRepository
 {
+    private $videoFactory;
+
+    public function __construct(ProductVideoFactory $videoFactory)
+    {
+        $this->videoFactory = $videoFactory;
+    }
+
     /**
+     * Save video to database
+     * 
      * @param int $productId
      * @param string $fileName
-     * @throws PrestaShopException
+     * @throws PrestaShopException //TODO: think about exceptions
      */
     public function saveVideoInfoToDb(int $productId, string $filename): void
     {
-        $videoObj = new ProductVideo($productId);
+        $videoObj = $this->videoFactory->createProductVideo($productId);
 
         if (empty($videoObj->id)) {
             $videoObj->id = $productId;
@@ -35,7 +45,7 @@ final class ProductVideoRepository
 
     public function getProductVideo(int $productId): ?ProductVideo
     {
-        $video = new ProductVideo($productId);
+        $video = $this->videoFactory->createProductVideo($productId);
         
         if (empty($video->id)) {
             return null;
