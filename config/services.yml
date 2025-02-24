@@ -1,4 +1,7 @@
 services:
+    slugger:
+        class: Symfony\Component\String\Slugger\AsciiSlugger
+
     PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier:
         class: PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier
         public: true
@@ -20,6 +23,19 @@ services:
             - name: tactician.handler
               command: PrestaShop\Module\ProductVideoLoops\CQRS\Command\AddProductVideoCommand
 
+    PrestaShop\Module\ProductVideoLoops\CQRS\CommandHandler\DeleteProductVideoCommandHandler:
+        class: PrestaShop\Module\ProductVideoLoops\CQRS\CommandHandler\DeleteProductVideoCommandHandler
+        arguments:
+            - '@PrestaShop\Module\ProductVideoLoops\Service\VideoManagementService'
+        tags:
+            - name: tactician.handler
+              command: PrestaShop\Module\ProductVideoLoops\CQRS\Command\DeleteProductVideoCommand
+
+    PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler:
+        class: PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler
+        arguments:
+            - '@PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
+
     PrestaShop\Module\ProductVideoLoops\CQRS\CommandBuilder\ProductVideoCommandsBuilder:
         class: PrestaShop\Module\ProductVideoLoops\CQRS\CommandBuilder\ProductVideoCommandsBuilder
         public: true
@@ -28,26 +44,80 @@ services:
         tags: 
             - 'core.product_command_builder'
 
-    PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler:
-        class: PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler
-        arguments:
-            - '@PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
-
     PrestaShop\Module\ProductVideoLoops\Service\VideoManagementService:
-        public: true
+        public: false
         autowire: true
         arguments:
-            $videoUploader: '@PrestaShop\Module\ProductVideoLoops\Service\VideoUploader'
-            $productVideoRepository: '@PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
+            - '@PrestaShop\Module\ProductVideoLoops\Service\VideoUploader'
+            - '@PrestaShop\Module\ProductVideoLoops\Service\VideoDeleter'
+            - '@PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
+
 
     PrestaShop\Module\ProductVideoLoops\Service\VideoUploader:
     # productvideoloops.services.video_uploader:
         class: PrestaShop\Module\ProductVideoLoops\Service\VideoUploader
         arguments:
             - '@PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
+            - '@slugger'
+            - '@PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService'
+
+    PrestaShop\Module\ProductVideoLoops\Service\VideoDeleter:
+    # productvideoloops.services.video_uploader:
+        class: PrestaShop\Module\ProductVideoLoops\Service\VideoDeleter
+        arguments:
+            - '@PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
+            - '@PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService'
 
     PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository:
     # productvideoloops.services.video_repository:
         class: PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository
         public: true
         autowire: true
+
+    PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory:
+        class: PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory
+        public: true
+        autowire: true
+
+    PrestaShop\Module\ProductVideoLoops\Service\ProductVideoPreviewService:
+        class: PrestaShop\Module\ProductVideoLoops\Service\ProductVideoPreviewService
+        public: true
+        autowire: true
+        arguments:
+            - '@PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory'
+            - '@PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService'
+
+    PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService:
+        class: PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService
+        autowire: true
+
+    #Prestashop\Module\ProductVideoLoops\Form\Theme\VideoPreview:
+     #   class: Symfony\Component\Form\FormRendererEngineInterface
+      #  tags:
+       # - { name: twig.form.theme, template: '@Modules/productvideoloops/views/templates/admin/forms/video_preview.html.twig' }
+
+    Prestashop\Module\ProductVideoLoops\Form\Theme\VideoCompound:
+        class: Symfony\Component\Form\FormRendererEngineInterface
+        tags:
+        - { name: twig.form.theme, template: '@Modules/productvideoloops/views/templates/admin/forms/video_compound.html.twig' }
+
+    PrestaShop\Module\ProductVideoLoops\Controller\DeleteVideoController:
+        class: PrestaShop\Module\ProductVideoLoops\Controller\DeleteVideoController
+        public: true
+        autowire: true
+
+    PrestaShop\Module\ProductVideoLoops\Subscriber\PresentProductHookSubscriber:
+        class: PrestaShop\Module\ProductVideoLoops\Subscriber\PresentProductHookSubscriber
+        public: false
+        autowire: true
+        arguments: 
+            - '@PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler'
+            - '@PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService'
+
+    PrestaShop\Module\ProductVideoLoops\Subscriber\ProductsListingHookSubscriber:
+        class: PrestaShop\Module\ProductVideoLoops\Subscriber\ProductsListingHookSubscriber
+        public: false
+        autowire: true
+        arguments: 
+            - '@PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler'
+            - '@PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService'
