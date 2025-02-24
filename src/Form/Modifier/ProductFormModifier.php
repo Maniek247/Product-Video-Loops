@@ -70,10 +70,13 @@ final class ProductFormModifier
     private function modifyDescriptionTab(?int $idProduct, FormBuilderInterface $productFormBuilder): void
     {
         $descriptionTabFormBuilder = $productFormBuilder->get('description');
-    
+
         $videoPreviewHtml = '';
         if ($idProduct) {
             $videoPreviewHtml = $this->videoPreviewService->getPreviewHtml($idProduct);
+            if (!$videoPreviewHtml) {
+                $videoPreviewHtml = '';
+            }
         }
         
         $this->formBuilderModifier->addAfter(
@@ -87,60 +90,15 @@ final class ProductFormModifier
                 'mapped' => [
                     'preview' => false,
                     'file' => true,
+                    'productId' => false,
                 ],
                 'data' => [
-                    'preview' => $videoPreviewHtml, // przekazanie html do 'preview' czyli podktypu HiddenType
+                    'preview' => $videoPreviewHtml,
                 ],
-        
+                'product_id' => $idProduct,
                 'form_theme' => 
                     '@Modules/productvideoloops/views/templates/admin/forms/video_compound.html.twig',
             ]
         );
-        
-       /* $this->formBuilderModifier->addAfter(
-            $descriptionTabFormBuilder,
-            'video_block',
-            'video_preview',
-            VideoPreviewType::class,
-            [
-                'label' => $this->translator->trans('Current video', [], 'Modules.Productvideoloops.Admin'),
-                'mapped' => false,
-                'required' => false,
-                'data' => $videoPreviewHtml,
-                'empty_data' => $this->translator->trans('There is no video added yet', [], 'Modules.Productvideoloops.Admin'),
-                // Ważne: powyższa metoda wstrzykuje <video> w postaci surowego HTML.
-                // Za chwilę wytłumaczę, jak to może wyglądać.
-                'attr' => [
-                    'readonly' => 'readonly',  // żeby nikt nie grzebał w tym polu
-                    'style' => 'height:auto;', // żeby tekstarea była wysokosci dopasowanej
-                ],
-                'form_theme' => [
-                    '@Modules/productvideoloops/views/templates/admin/forms/video_preview.html.twig',
-                ],
-            ]
-        );
-        
-        $this->formBuilderModifier->addAfter(
-            $descriptionTabFormBuilder,
-            'video_preview',
-            'video_upload',
-            FileType::class,
-            [
-                'label' => $this->translator->trans('Video loop', [], 'Modules.Productvideoloops.Admin'),
-                'mapped' => true,
-                'required' => false,
-                'empty_data' => '',
-                'form_theme' => '@PrestaShop/Admin/TwigTemplateForm/prestashop_ui_kit_base.html.twig',
-                'constraints' => [
-                    new File([
-                        'maxSize' => '5M',
-                        'mimeTypes' => [
-                            'video/mp4'
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid .mp4 video',
-                    ]),
-                ]
-            ]
-        ); */
     }
 }
