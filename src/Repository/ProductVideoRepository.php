@@ -21,7 +21,6 @@ final class ProductVideoRepository
      * 
      * @param int $productId
      * @param string $fileName
-     * @throws PrestaShopException //TODO: think about exceptions
      */
     public function saveVideoInfoToDb(int $productId, string $filename): void
     {
@@ -45,7 +44,7 @@ final class ProductVideoRepository
 
     public function getProductVideo(int $productId): ?ProductVideo
     {
-        $video = $this->videoFactory->createProductVideo($productId);
+        $video = $this->videoFactory->createProductVideo($productId); //TODO: decide to use factory or not
         
         if (empty($video->id)) {
             return null;
@@ -54,4 +53,11 @@ final class ProductVideoRepository
         return $video;
     }
 
+    public function deleteVideoInfoFromDb(int $productId): void
+    {
+        $video = new ProductVideo($productId); //TODO: decide to use factory or not
+        if (!empty($video->id)) {
+            $video->delete();
+        }
+    }
 }

@@ -1,0 +1,6 @@
+productvideoloops_delete_video:
+  path: /productvideoloops/delete-video/{idProduct}
+  methods: [GET]
+  defaults:
+    _controller: 'PrestaShop\Module\ProductVideoLoops\Controller\DeleteVideoController::deleteVideoAction'
+ 
