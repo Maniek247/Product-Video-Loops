@@ -56,6 +56,7 @@ class Installer
             'actionPresentProduct',
             'actionPresentProductListing',
             'actionAdminControllerSetMedia',
+            'actionFrontControllerSetMedia',
         ];
 
         return (bool) $module->registerHook($hooks);

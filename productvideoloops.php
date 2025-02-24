@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 use PrestaShop\Module\ProductVideoLoops\Install\Installer;
-use PrestaShop\Module\ProductVideoLoops\Entity\ProductVideo;
 use PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory;
 use Symfony\Component\Templating\EngineInterface;
 use PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier;
 use PrestaShop\Module\ProductVideoLoops\Form\Modifier\CombinationFormModifier;
 use PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository;
 use PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler;
-use PrestaShop\Module\ProductVideoLoops\Subscriber\FrontControllerHookSubscriber;
+use PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService;
+use PrestaShop\Module\ProductVideoLoops\Subscriber\PresentProductHookSubscriber;
 use PrestaShop\Module\ProductVideoLoops\Subscriber\ProductsListingHookSubscriber;
 
 if (!defined('_PS_VERSION_')) {
@@ -139,8 +139,8 @@ class ProductVideoLoops extends Module
         
         $repo = new ProductVideoRepository($productVideoFactory);
         $handler = new GetProductVideoQueryHandler($repo);
-
-        $subscriber = new FrontControllerHookSubscriber($handler);
+        $linkBuilder = new LinkBuilderService;
+        $subscriber = new PresentProductHookSubscriber($handler, $linkBuilder);
         $subscriber->onActionPresentProduct($params);
     }
 
@@ -155,8 +155,28 @@ class ProductVideoLoops extends Module
 
         $repo = new ProductVideoRepository($productVideoFactory);
         $handler = new GetProductVideoQueryHandler($repo);
-
-        $subscriber = new ProductsListingHookSubscriber($handler);
+        $linkBuilder = new LinkBuilderService;
+        $subscriber = new ProductsListingHookSubscriber($handler, $linkBuilder);
         $subscriber->onActionPresentProductListing($params);
+    }
+
+    /**
+     * Register BO CSS file
+     *
+     * @param array $params
+     */
+    public function hookActionAdminControllerSetMedia(): void
+    {
+        $this->context->controller->addCSS($this->_path . 'views/css/productvideoloops.css', 'all');
+    }
+
+    /**
+     * Register FO CSS file
+     *
+     * @param array $params
+     */
+    public function hookActionFrontControllerSetMedia(): void
+    {
+        $this->context->controller->addCSS($this->_path . 'views/css/video.css', 'all');
     }
 }
