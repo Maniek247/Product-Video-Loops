@@ -4,17 +4,11 @@ declare(strict_types=1);
 
 namespace PrestaShop\Module\ProductVideoLoops\Form\Modifier;
 
-use PrestaShop\Module\ProductVideoLoops\Entity\ProductVideo;
-use PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory;
 use PrestaShop\PrestaShop\Core\Domain\Product\ValueObject\ProductId;
 use PrestaShopBundle\Form\FormBuilderModifier;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use PrestaShop\Module\ProductVideoLoops\Form\Type\VideoPreviewType;
 use PrestaShop\Module\ProductVideoLoops\Form\Type\VideoCompoundType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Validator\Constraints\File;
 use PrestaShop\Module\ProductVideoLoops\Service\ProductVideoPreviewService;
 
 final class ProductFormModifier
