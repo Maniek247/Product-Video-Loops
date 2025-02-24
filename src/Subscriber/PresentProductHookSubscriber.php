@@ -6,17 +6,22 @@ namespace PrestaShop\Module\ProductVideoLoops\Subscriber;
 
 use PrestaShop\Module\ProductVideoLoops\CQRS\Query\GetProductVideoQuery;
 use PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler;
+use PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService;
 
-final class FrontControllerHookSubscriber
+final class PresentProductHookSubscriber
 {
     /**
      * @var GetProductVideoQueryHandler
      */
     private $queryHandler;
 
-    public function __construct(GetProductVideoQueryHandler $queryHandler)
-    {
+    private $linkBuilderService;
+
+    public function __construct(GetProductVideoQueryHandler $queryHandler, 
+    LinkBuilderService $linkBuilderService
+    ){
         $this->queryHandler = $queryHandler;
+        $this->linkBuilderService = $linkBuilderService;
     }
 
     /**
@@ -26,37 +31,23 @@ final class FrontControllerHookSubscriber
      */
     public function onActionPresentProduct(array $params): void
     {
-        //echo '<pre>';
-        //var_dump($params);
-        //echo '</pre>';
         if (!isset($params['presentedProduct'])) {
             return;
         }
-    
-        /*TODO: 'presentedProduct' chyba nie jest tablicą, tylko obiektem LazyArray
-        Na końcu tego kodu pojawiły się problemy z operacją przesunięcia tablicy - do weryfikacji */
         $presentedProduct = &$params['presentedProduct'];
 
-        //echo '<pre>';
-        //var_dump($presentedProduct);
-        //echo '</pre>';
         if (!isset($presentedProduct['id_product'])) {
             return;
         }
         $idProduct = (int)$presentedProduct['id_product'];
-        //echo '<pre>';
-        //var_dump($idProduct);
-        //echo '</pre>';
 
-        /* Pobranie info z DB
-        GetProductVideoQuery($idProduct) zwraca encję ProductVideo lub null na podstawie konkretnego id*/
         $productVideo = $this->queryHandler->handle(new GetProductVideoQuery($idProduct));
         if (!$productVideo) {
             return;
         }
-        //echo '<pre>';
-        //var_dump($productVideo);
-        //echo '</pre>';
+
+        $folderUrl = $this->linkBuilderService->buildVideoURL();
+        $videoUrl = $folderUrl . $productVideo->filename;
 
         $videoArray = [
             'cover' => 1,
@@ -116,46 +107,30 @@ final class FrontControllerHookSubscriber
             ],
             'associatedVariants' => [],
             'is_video'  => true,
-            'video_url' => 'https://adamdebesciak.eu/img/videoloops/67a34dc77a4f9-Make_perfect_jewellery_product_ad_seed723238620.mp4',  //TODO: Link builder method
+            'video_url' => $videoUrl,
         ];       
         
-        // Pobranie zdjęć do tymczasowej tablicy
+        /*  
+        $presentedProduct is an object so we can't modify it as a typical array
+        Insted of it use temporary array */
         $images = $presentedProduct['images'];
         if (!is_array($images)) {
             $images = [];
         }
-        //echo '<pre>';
-        //echo '<p>shift</p>';
-        //var_dump($images);
-        //echo '</pre>';
 
-        // przesunięcie w tablicy zdjęć
-        foreach ($images as &$element) {
-            if (isset($element['position'])){
-                $element['position']++;
+        foreach ($images as &$image) {
+            if (isset($image['position'])){
+                $image['position']++;
             }
-            if (isset($element['cover']) && ($element['cover'] != 0)){
-                $element['cover'] = 0;
+            if (isset($image['cover']) && ($image['cover'] != 0)){
+                $image['cover'] = 0;
             }
         }
-        unset($element);
-        //echo '<pre>';
-        //echo '<p>shift</p>';
-        //var_dump($images);
-        //echo '</pre>';
+        unset($image);
 
-        // Element video idzie na początek tablicy zdjęć
         array_unshift($images, $videoArray);
 
-        // Przypisanie tymczasowej tablicy do obiektu LazyArray
         $presentedProduct['images'] = $images;
-
         $presentedProduct['default_image'] = $videoArray;
-    }
-
-    private function buildVideoUrl(string $filename): string
-    {
-        // TODO: generowanie linka z odpowiednim http/https
-        return _PS_BASE_URL_.__PS_BASE_URI__.'img/videoloops/'.$filename;
     }
 }

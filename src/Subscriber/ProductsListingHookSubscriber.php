@@ -6,6 +6,7 @@ namespace PrestaShop\Module\ProductVideoLoops\Subscriber;
 
 use PrestaShop\Module\ProductVideoLoops\CQRS\Query\GetProductVideoQuery;
 use PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler;
+use PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService;
 
 final class ProductsListingHookSubscriber
 {
@@ -14,9 +15,13 @@ final class ProductsListingHookSubscriber
      */
     private $queryHandler;
 
-    public function __construct(GetProductVideoQueryHandler $queryHandler)
-    {
+    private $linkBuilderService;
+
+    public function __construct(GetProductVideoQueryHandler $queryHandler, 
+        LinkBuilderService $linkBuilderService
+    ){
         $this->queryHandler = $queryHandler;
+        $this->linkBuilderService = $linkBuilderService;
     }
 
     /**
@@ -29,7 +34,6 @@ final class ProductsListingHookSubscriber
         if (!isset($params['presentedProduct'])) {
             return;
         }
-
         $presentedProduct = &$params['presentedProduct'];
 
         if (!isset($presentedProduct['id_product'])) {
@@ -42,25 +46,17 @@ final class ProductsListingHookSubscriber
             return;
         }
 
-        $videoThumb = 'https://adamdebesciak.eu/img/videoloops/dodge%20felgi.jpg';
+        $folderUrl = $this->linkBuilderService->buildVideoURL();
+        $videoUrl = $folderUrl . $productVideo->filename;
 
         /*  
         $presentedProduct is an object so we can't modify it as a typical array
-        Insted of it we using temporary array */
+        Insted of it use temporary array */
         $cover = $presentedProduct['cover'];
 
-        // TODO: check if presta needs $videoThumb and if, build temporary arrays 
-        /*if (isset($presentedProduct['value']['bySize']['home_default'])) {
-            $presentedProduct['value']['bySize']['home_default']['url'] = $videoThumb;
-            $presentedProduct['value']['bySize']['home_default']['sources']['jpg'] = $videoThumb;
-        }*/
-
         $cover['is_video'] = true;
-        $cover['video_url'] = 'https://adamdebesciak.eu/img/videoloops/67a34dc77a4f9-Make_perfect_jewellery_product_ad_seed723238620.mp4'; //TODO: Link builder method
+        $cover['video_url'] = $videoUrl;
 
         $presentedProduct['cover'] = $cover;
-        //echo '<pre>';
-        //var_dump($params['presentedProduct']);
-        //echo '</pre>';
     }
 }
