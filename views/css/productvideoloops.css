@@ -12,6 +12,11 @@
     position: relative;
 }
 
+.video-preview-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
 .video-preview,
 .video-placeholder {
     width: 200px;
@@ -31,8 +36,8 @@
 
 .delete-video {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 0px;
+    right: -30px;
 }
 
 .video-right {
