@@ -23,7 +23,7 @@ use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\CommandBuilder\Product\Pr
 final class ProductVideoCommandsBuilder implements ProductCommandsBuilderInterface
 {
     public function buildCommands(ProductId $productId, array $formData, ShopConstraint $singleShopConstraint): array
-    {        
+    {
         $command = null;
         if (isset($formData['description']['video_block']['file']) 
             && $formData['description']['video_block']['file'] instanceof UploadedFile) {

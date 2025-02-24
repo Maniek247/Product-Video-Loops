@@ -31,9 +31,8 @@ final class AddProductVideoCommandHandler
      */
     public function handle(AddProductVideoCommand $command): void
     {
-        $this->videoManagementService->addVideoToProduct(
-            $command->getProductId()->getValue(),
-            $command->getUploadedFile()
-        );
+        $productId = $command->getProductId()->getValue();
+        $uploadedFile = $command->getUploadedFile();
+        $this->videoManagementService->addVideoToProduct($productId, $uploadedFile);
     }
 }
