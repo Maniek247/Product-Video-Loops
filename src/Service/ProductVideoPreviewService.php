@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace PrestaShop\Module\ProductVideoLoops\Service;
 
 use PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory;
+use PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService;
 
 class ProductVideoPreviewService
 {
 
     private $videoFactory;
 
-    public function __construct(ProductVideoFactory $videoFactory)
+    private $linkBuilderService;
+
+    public function __construct(ProductVideoFactory $videoFactory, LinkBuilderService $linkBuilderService)
     {
         $this->videoFactory = $videoFactory;
+        $this->linkBuilderService = $linkBuilderService;
     }
 
     /**
@@ -30,11 +34,11 @@ class ProductVideoPreviewService
             return '';
         }
 
-        // TODO: Url https
-        $videoUrl = _PS_BASE_URL_.__PS_BASE_URI__.'img/videoloops/'.$video->filename;
+        $folderUrl = $this->linkBuilderService->buildVideoURL();
+        $videoUrl = $folderUrl . $video->filename;
 
         $html = '<video width="auto" height="200" autoplay playsinline muted loop>
-                <source src="'.$videoUrl.'" type="video/mp4" />
+                <source src="' . $videoUrl . '" type="video/mp4" />
                 Twoja przeglądarka nie wspiera wyświetlania wideo.
         </video>';
 
