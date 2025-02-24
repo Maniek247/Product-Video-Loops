@@ -8,13 +8,16 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
 
 class VideoCompoundType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $previewHtml = $options['data']['preview'] ?? '';
-
+        $productId = $options['product_id'];
+        
         $builder->add('file', FileType::class, [
             'required' => false,
             'mapped' => true,
@@ -37,13 +40,33 @@ class VideoCompoundType extends AbstractType
             'data' => $previewHtml,
         ]);
 
-        // TODO: delete button - HiddenType?
+        $builder->add('productId', HiddenType::class, [
+            'required' => false,
+            'mapped' => false,
+            'label' => false,
+            'data' => $productId,
+        ]);
+        
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($previewHtml, $productId) {
+            $formData = $event->getData();
+
+            if (empty($formData['productId'])) {
+                $formData['productId'] = $productId;
+            }
+        
+            if (!array_key_exists('preview', $formData)) {
+                $formData['preview'] = $previewHtml;
+            }
+        
+            $event->setData($formData);
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'file_label' => null,
+            'product_id' => null,
         ]);
     }
 
