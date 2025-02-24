@@ -1,0 +1,29 @@
+video.thumb.js-thumb {
+    vertical-align: middle;
+}
+  
+.product-cover-video,
+.js-qv-product-cover.video-fluid,
+video.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+video.thumb.js-modal-thumb {
+    max-width: 148px; 
+    height: auto;
+    object-fit: cover;
+}
+  
+.quickview .js-qv-product-cover.product-cover-modal,
+.quickview video.js-qv-product-cover.product-cover-modal {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    margin: 0 auto;
+    object-fit: cover;
+}
+
+#product-modal .js-modal-product-cover.product-cover-modal {
+    max-width: 800px;
+}
