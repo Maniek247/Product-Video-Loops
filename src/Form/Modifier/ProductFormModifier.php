@@ -79,7 +79,8 @@ final class ProductFormModifier
             'video_block',
             VideoCompoundType::class,
             [
-                'label' => $this->translator->trans('Video loop block', [], 'Modules.Productvideoloops.Admin'),
+                'label' => false,
+                'custom_label' => $this->translator->trans('Video loops', [], 'Modules.Productvideoloops.Productformmodifier'),
                 'required' => false,
                 'mapped' => [
                     'preview' => false,

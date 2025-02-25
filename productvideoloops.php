@@ -30,8 +30,8 @@ class ProductVideoLoops extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->trans('Product Video Loops', [], 'Modules.Productvideoloops.Config');
-        $this->description = $this->trans('Add product video loop viewed as product thumbnail', [], 'Modules.Productvideoloops.Config');
+        $this->displayName = $this->trans('Product Video Loops', [], 'Modules.Productvideoloops.Productvideoloops');
+        $this->description = $this->trans('Add product video loop viewed as product thumbnail', [], 'Modules.Productvideoloops.Productvideoloops');
     }
 
     /**
@@ -70,34 +70,6 @@ class ProductVideoLoops extends Module
     public function isUsingNewTranslationSystem(): bool
     {
         return true;
-    }
-
-    /**
-     * Hook to display configuration related to the module in the Modules extra tab in product page.
-     *
-     * @param array $params
-     *
-     * @return string
-     * @throws PrestaShopDatabaseException
-     * @throws PrestaShopException
-     */
-    public function hookDisplayAdminProductsExtra(array $params): string
-    {
-        /** @var ProductVideoFactory $productVideoFactory */
-        $productVideoFactory = $this->get(ProductVideoFactory::class);
-
-        $productId = $params['id_product'];
-        $productVideo = $productVideoFactory->createProductVideo($productId);
-        $imgDir = _PS_BASE_URL_.__PS_BASE_URI__.'img/';
-
-        /** @var EngineInterface $twig */
-        
-        $twig = $this->get('twig');
-
-        return $twig->render('@Modules/productvideoloops/views/templates/admin/product_video_module.html.twig', [
-            'productVideo' => $productVideo,
-            'imgDir' => $imgDir,
-        ]);
     }
 
     /**

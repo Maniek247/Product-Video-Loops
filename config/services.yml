@@ -2,6 +2,7 @@ services:
     slugger:
         class: Symfony\Component\String\Slugger\AsciiSlugger
 
+    #Form modifiers
     PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier:
         class: PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier
         public: true
@@ -15,6 +16,7 @@ services:
         arguments:
             $formBuilderModifier: '@form.form_builder_modifier'
 
+    #CQRS
     PrestaShop\Module\ProductVideoLoops\CQRS\CommandHandler\AddProductVideoCommandHandler:
         class: PrestaShop\Module\ProductVideoLoops\CQRS\CommandHandler\AddProductVideoCommandHandler
         arguments:
@@ -44,6 +46,7 @@ services:
         tags: 
             - 'core.product_command_builder'
 
+    #Services
     PrestaShop\Module\ProductVideoLoops\Service\VideoManagementService:
         public: false
         autowire: true
@@ -54,7 +57,6 @@ services:
 
 
     PrestaShop\Module\ProductVideoLoops\Service\VideoUploader:
-    # productvideoloops.services.video_uploader:
         class: PrestaShop\Module\ProductVideoLoops\Service\VideoUploader
         arguments:
             - '@PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
@@ -62,22 +64,10 @@ services:
             - '@PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService'
 
     PrestaShop\Module\ProductVideoLoops\Service\VideoDeleter:
-    # productvideoloops.services.video_uploader:
         class: PrestaShop\Module\ProductVideoLoops\Service\VideoDeleter
         arguments:
             - '@PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository'
             - '@PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService'
-
-    PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository:
-    # productvideoloops.services.video_repository:
-        class: PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository
-        public: true
-        autowire: true
-
-    PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory:
-        class: PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory
-        public: true
-        autowire: true
 
     PrestaShop\Module\ProductVideoLoops\Service\ProductVideoPreviewService:
         class: PrestaShop\Module\ProductVideoLoops\Service\ProductVideoPreviewService
@@ -91,21 +81,33 @@ services:
         class: PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService
         autowire: true
 
-    #Prestashop\Module\ProductVideoLoops\Form\Theme\VideoPreview:
-     #   class: Symfony\Component\Form\FormRendererEngineInterface
-      #  tags:
-       # - { name: twig.form.theme, template: '@Modules/productvideoloops/views/templates/admin/forms/video_preview.html.twig' }
+    PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository:
+        class: PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository
+        public: true
+        autowire: true
+
+    PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory:
+        class: PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory
+        public: true
+        autowire: true
+
+    PrestaShop\Module\ProductVideoLoops\Form\Type\VideoCompoundType:
+        class: PrestaShop\Module\ProductVideoLoops\Form\Type\VideoCompoundType
+        autowire: true
+        tags:
+            - { name: form.type }
 
     Prestashop\Module\ProductVideoLoops\Form\Theme\VideoCompound:
         class: Symfony\Component\Form\FormRendererEngineInterface
         tags:
-        - { name: twig.form.theme, template: '@Modules/productvideoloops/views/templates/admin/forms/video_compound.html.twig' }
+            - { name: twig.form.theme, template: '@Modules/productvideoloops/views/templates/admin/forms/video_compound.html.twig' }
 
     PrestaShop\Module\ProductVideoLoops\Controller\DeleteVideoController:
         class: PrestaShop\Module\ProductVideoLoops\Controller\DeleteVideoController
         public: true
         autowire: true
 
+    #Subscribers
     PrestaShop\Module\ProductVideoLoops\Subscriber\PresentProductHookSubscriber:
         class: PrestaShop\Module\ProductVideoLoops\Subscriber\PresentProductHookSubscriber
         public: false

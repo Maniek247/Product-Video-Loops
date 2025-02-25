@@ -1,4 +1,8 @@
 {% block video_compound_widget %}
+    {% if form.vars.custom_label is defined and form.vars.custom_label %}
+            <h3>{{ form.vars.custom_label }}</h3>
+    {% endif %}
+
     <div class="form-group video-compound-container">
         {# Left column: video preview #}
         <div class="video-left">
@@ -11,14 +15,14 @@
                     <a href="{{ path('productvideoloops_delete_video', {'idProduct': productId}) }}"
                        class="delete-video tooltip-link"
                        data-toggle="pstooltip"
-                       title="Delete"
+                       title="{{ 'Delete'|trans({}, 'Modules.Productvideoloops.Video_compound.html.twig') }}"
                        data-placement="right">
                         <i class="material-icons">delete</i>
                     </a>
                 </div>
             {% else %}
                 <div class="video-placeholder">
-                    <em>Brak wideo</em>
+                    <em>{{ 'No video'|trans({}, 'Modules.Productvideoloops.Video_compound.html.twig') }}</em>
                 </div>
             {% endif %}
         </div>
@@ -35,7 +39,7 @@
         {# Help Box icon #}
         <span class="help-box"
               data-toggle="popover"
-              data-content="Upload mp4 video type with max size of 5mb"
+              data-content="{{ 'Upload a valid MP4 file with a maximum size of 5MB.'|trans({}, 'Modules.Productvideoloops.Video_compound.html.twig') }}"
               data-original-title=""
               data-trigger="hover"
               title="">
