@@ -10,12 +10,6 @@ services:
         arguments:
             $formBuilderModifier: '@form.form_builder_modifier'
 
-    PrestaShop\Module\ProductVideoLoops\Form\Modifier\CombinationFormModifier:
-        public: true
-        autowire: true
-        arguments:
-            $formBuilderModifier: '@form.form_builder_modifier'
-
     #CQRS
     PrestaShop\Module\ProductVideoLoops\CQRS\CommandHandler\AddProductVideoCommandHandler:
         class: PrestaShop\Module\ProductVideoLoops\CQRS\CommandHandler\AddProductVideoCommandHandler

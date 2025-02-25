@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 use PrestaShop\Module\ProductVideoLoops\Install\Installer;
 use PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory;
-use Symfony\Component\Templating\EngineInterface;
 use PrestaShop\Module\ProductVideoLoops\Form\Modifier\ProductFormModifier;
-use PrestaShop\Module\ProductVideoLoops\Form\Modifier\CombinationFormModifier;
 use PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository;
 use PrestaShop\Module\ProductVideoLoops\CQRS\QueryHandler\GetProductVideoQueryHandler;
 use PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService;
@@ -84,20 +82,6 @@ class ProductVideoLoops extends Module
         $idProduct = !empty($params['id']) ? (int) $params['id'] : null;
 
         $productFormModifier->modify($idProduct, $params['form_builder']);
-    }
-
-    /**
-     * Hook that modifies the combination form structure.
-     *
-     * @param array $params
-     */
-    public function hookActionCombinationFormFormBuilderModifier(array $params): void
-    { 
-        /** @var CombinationFormModifier $productFormModifier */
-        $productFormModifier = $this->get(CombinationFormModifier::class);
-       // $combinationId = isset($params['id']) ? new CombinationId((int) $params['id']) : null;
-
-        $productFormModifier->modify(/* $combinationId, */$params['form_builder']);
     }
 
     /**
