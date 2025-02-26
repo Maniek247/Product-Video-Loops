@@ -29,7 +29,7 @@ class ProductVideoLoops extends Module
         parent::__construct();
 
         $this->displayName = $this->trans('Product Video Loops', [], 'Modules.Productvideoloops.Productvideoloops');
-        $this->description = $this->trans('Add product video loop viewed as product thumbnail', [], 'Modules.Productvideoloops.Productvideoloops');
+        $this->description = $this->trans('Set video loop as a product cover. Video loop will be displayed in catalog and product pages.', [], 'Modules.Productvideoloops.Productvideoloops');
     }
 
     /**
