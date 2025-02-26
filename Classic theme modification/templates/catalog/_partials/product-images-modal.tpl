@@ -9,14 +9,11 @@
             {if isset($product.default_image.is_video) && $product.default_image.is_video == true}
                 <video
                   class="js-modal-product-cover product-cover-modal"
-                  width="{$product.default_image.bySize.large_default.width}"
-                  height="{$product.default_image.bySize.large_default.height}"
                   src="{$product.default_image.video_url}"
                   autoplay
                   muted
                   loop
                 >
-                  Your browser does not support the video tag.
                 </video>
               {else}
                 <picture>

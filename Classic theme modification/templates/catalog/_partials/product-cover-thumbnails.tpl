@@ -13,8 +13,9 @@
             muted
             loop
             data-is-video="1"
+            width="{$product.default_image.bySize.large_default.width}"
+            height="{$product.default_image.bySize.large_default.height}"
           >
-            Your browser does not support the video tag.
           </video>
         {else}
           <picture>
@@ -82,7 +83,6 @@
                 width="{$image.bySize.small_default.width}"
                 height="{$image.bySize.small_default.height}"
               >
-                Your browser does not support the video tag.
               </video>
             {else}
               <picture>
