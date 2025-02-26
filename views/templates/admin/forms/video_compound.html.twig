@@ -15,14 +15,14 @@
                     <a href="{{ path('productvideoloops_delete_video', {'idProduct': productId}) }}"
                        class="delete-video tooltip-link"
                        data-toggle="pstooltip"
-                       title="{{ 'Delete'|trans({}, 'Modules.Productvideoloops.Video_compound.html.twig') }}"
+                       title="{{ 'Delete'|trans({}, 'Modules.Productvideoloops.Videocompoundhtmltwig') }}"
                        data-placement="right">
                         <i class="material-icons">delete</i>
                     </a>
                 </div>
             {% else %}
                 <div class="video-placeholder">
-                    <em>{{ 'No video'|trans({}, 'Modules.Productvideoloops.Video_compound.html.twig') }}</em>
+                    <em>{{ 'No video'|trans({}, 'Modules.Productvideoloops.Videocompoundhtmltwig') }}</em>
                 </div>
             {% endif %}
         </div>
@@ -39,7 +39,7 @@
         {# Help Box icon #}
         <span class="help-box"
               data-toggle="popover"
-              data-content="{{ 'Upload a valid MP4 file with a maximum size of 5MB.'|trans({}, 'Modules.Productvideoloops.Video_compound.html.twig') }}"
+              data-content="{{ 'Upload a valid MP4 file with a maximum size of 5MB.'|trans({}, 'Modules.Productvideoloops.Videocompoundhtmltwig') }}"
               data-original-title=""
               data-trigger="hover"
               title="">
