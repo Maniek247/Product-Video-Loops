@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="pl-PL" target-language="pl-PL" datatype="plaintext">
+    <body>
+      <trans-unit id="ffeed24e8e4fd763c1d0d02c6e5d6e15">
+        <source>Upload file</source>
+        <target>Wgraj plik</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="89161cfdd68b1554d79f5a28aa05db60">
+        <source>Uploaded video will always be set as a cover and will be the first thumbnail</source>
+        <target>Wgrany film zawsze będzie ustawiony jako okładka produktu i pierwsza miniaturka</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9cd23bcac97287e91588076c31ad411a">
+        <source>The file is too large ({{ size }} {{ suffix }}). Allowed maximum size is {{ limit }} {{ suffix }}.</source>
+        <target>Plik jest za duży ({{ size }} {{ suffix }}). Maksymalny dozwolony rozmiar to {{ limit }} {{ suffix }}.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b6f4e91e313a94ea1c53408dd8dc426b">
+        <source>Uploaded type of the file is invalid ({{ type }}). Allowed video type is {{ types }}.</source>
+        <target>Niedozwolony format pliku ({{ type }}). Wgraj plik {{ types }}.</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

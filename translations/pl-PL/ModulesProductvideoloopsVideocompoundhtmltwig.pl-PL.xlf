@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="pl-PL" target-language="pl-PL" datatype="plaintext">
+    <body>
+      <trans-unit id="f2a6c498fb90ee345d997f888fce3b18">
+        <source>Delete</source>
+        <target>Usuń</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6fdd55fe81e98fbc9896dd1558db957e">
+        <source>No video</source>
+        <target>Brak filmu</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6253efed091a9fbc2d8cccb49baa8c34">
+        <source>Upload a valid MP4 file with a maximum size of 5MB.</source>
+        <target>Wgraj plik MP4 o maksymalnym rozmiarze 5MB.</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

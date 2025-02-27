@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="pl-PL" target-language="pl-PL" datatype="plaintext">
+    <body>
+      <trans-unit id="ab982212bcfa720148ecda120814a209">
+        <source>Product Video Loops</source>
+        <target>Product Video Loops</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="faf8096d0ae3b0ae3ed268373a3e9e60">
+        <source>Set video loop as a product cover. Video loop will be displayed in catalog and product pages.</source>
+        <target>Ustaw krótki zapętlony film jako okładkę produktu. Film będzie wyświetlany na stronach katalogowych i produktowych.</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
