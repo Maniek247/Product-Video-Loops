@@ -51,7 +51,6 @@ class Installer
     {
         $hooks = [
             'actionProductFormBuilderModifier',
-            'actionCombinationFormFormBuilderModifier',
             'displayAdminProductsExtra',
             'actionPresentProduct',
             'actionPresentProductListing',
