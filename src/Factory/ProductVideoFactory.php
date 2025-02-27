@@ -9,7 +9,11 @@ use PrestaShop\Module\ProductVideoLoops\Entity\ProductVideo;
 class ProductVideoFactory
 {
     /**
-     * Factory that creates ProductVideo entity based on specify product id
+     * Creates ProductVideo based on specified product ID
+     *
+     * @param int $productId
+     *
+     * @return ProductVideo Created ProductVideo entity
      */
     public function createProductVideo(int $productId): ProductVideo
     {

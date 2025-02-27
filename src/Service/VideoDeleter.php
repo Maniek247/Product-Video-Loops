@@ -5,14 +5,23 @@ declare(strict_types=1);
 namespace PrestaShop\Module\ProductVideoLoops\Service;
 
 use PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository;
-use PrestaShopException;
 
 class VideoDeleter
 {
+    /**
+     * @var ProductVideoRepository
+     */
     private $productVideoRepository;
 
+    /**
+     * @var LinkBuilderService
+     */
     private $linkBuilderService;
 
+    /**
+     * @param ProductVideoRepository $productVideoRepository
+     * @param LinkBuilderService $linkBuilderService
+     */
     public function __construct(ProductVideoRepository $productVideoRepository, LinkBuilderService $linkBuilderService)
     {
         $this->productVideoRepository = $productVideoRepository;
@@ -20,9 +29,11 @@ class VideoDeleter
     }
 
     /**
-     * Delete a video file.
+     * Delete a video file from storage
+     * 
+     * @param int $productId
      *
-     * @throws PrestaShopException If video does not exist
+     * @return void
      */
     public function delete(int $productId): void
     {

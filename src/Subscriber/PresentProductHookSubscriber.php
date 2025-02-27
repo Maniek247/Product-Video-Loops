@@ -15,8 +15,15 @@ final class PresentProductHookSubscriber
      */
     private $queryHandler;
 
+    /**
+     * @var LinkBuilderService
+     */
     private $linkBuilderService;
 
+    /**
+     * @param GetProductVideoQueryHandler $queryHandler
+     * @param LinkBuilderService $linkBuilderService
+     */
     public function __construct(GetProductVideoQueryHandler $queryHandler, 
     LinkBuilderService $linkBuilderService
     ){
@@ -25,9 +32,14 @@ final class PresentProductHookSubscriber
     }
 
     /**
-     * ActionPresentProduct hook logic
+     * Modifies the presented product data by adding video information if available.
+     * 
+     * This method is triggered by the ActionPresentProduct hook. It checks if the presented 
+     * product has an associated video and, if so, modifies its data to include video
      *
-     * @param array $params
+     * @param array $params An associative array containing the presented product data
+     * 
+     * @return void
      */
     public function onActionPresentProduct(array $params): void
     {
@@ -110,9 +122,7 @@ final class PresentProductHookSubscriber
             'video_url' => $videoUrl,
         ];       
         
-        /*  
-        $presentedProduct is an object so we can't modify it as a typical array
-        Insted of it use temporary array */
+        // Clone images array to modify it, as $presentedProduct is an LazyArray object
         $images = $presentedProduct['images'];
         if (!is_array($images)) {
             $images = [];

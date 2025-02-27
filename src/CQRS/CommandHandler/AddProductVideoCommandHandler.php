@@ -12,12 +12,19 @@ use PrestaShop\Module\ProductVideoLoops\Service\VideoManagementService;
  */
 final class AddProductVideoCommandHandler
 {
+    /**
+     * @var VideoManagementService
+     */
     private $videoManagementService;
 
+    /**
+     * @param VideoManagementService $videoManagementService
+     */
     public function __construct(VideoManagementService $videoManagementService)
     {
         $this->videoManagementService = $videoManagementService;
     }
+
     /**
      * This method will be triggered when related command is dispatched
      * Note - product form data handler create() method is a little unique

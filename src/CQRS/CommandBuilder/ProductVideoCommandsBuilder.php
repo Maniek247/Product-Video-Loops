@@ -22,6 +22,13 @@ use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\CommandBuilder\Product\Pr
  */
 final class ProductVideoCommandsBuilder implements ProductCommandsBuilderInterface
 {
+    /**
+     * @param ProductId $productId
+     * @param array $formData
+     * @param ShopConstraint $singleShopConstraint
+     *
+     * @return array
+     */
     public function buildCommands(ProductId $productId, array $formData, ShopConstraint $singleShopConstraint): array
     {
         $command = null;

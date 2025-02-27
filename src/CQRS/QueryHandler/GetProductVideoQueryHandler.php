@@ -15,15 +15,19 @@ final class GetProductVideoQueryHandler
      */
     private $productVideoRepository;
 
+    /**
+     * @param ProductVideoRepository $productVideoRepository
+     */
     public function __construct(ProductVideoRepository $productVideoRepository)
     {
         $this->productVideoRepository = $productVideoRepository;
     }
 
     /**
-     * Handles the query to retrieve the product's video.
+     * Handles the query to retrieve product video
      *
      * @param GetProductVideoQuery $query
+     * 
      * @return ProductVideo|null
      */
     public function handle(GetProductVideoQuery $query): ?ProductVideo

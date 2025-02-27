@@ -8,16 +8,29 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use PrestaShop\Module\ProductVideoLoops\Repository\ProductVideoRepository;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService;
-use PrestaShopException;
 
 class VideoUploader
 {
+    /**
+     * @var ProductVideoRepository
+     */
     private $productVideoRepository;
 
+    /**
+     * @var AsciiSlugger
+     */
     private $slugger;
 
+    /**
+     * @var LinkBuilderService
+     */
     private $linkBuilderService;
 
+    /**
+     * @param ProductVideoRepository $productVideoRepository
+     * @param AsciiSlugger $slugger
+     * @param LinkBuilderService $linkBuilderService
+     */
     public function __construct(ProductVideoRepository $productVideoRepository, 
         AsciiSlugger $slugger, 
         LinkBuilderService $linkBuilderService
@@ -28,14 +41,13 @@ class VideoUploader
     }
 
     /**
-     * Uploads a video file.
+     * Uploads a video file to folder
      *
-     * Validates that the uploaded file is in the allowed format, generates a safe and unique
-     * file name based on the original name using a slugger. Then moves the file to destination directory.
-     * Attemps to create destination directory if it does not exist.
+     * This method generates a safe and unique file name based on the original name using a slugger. 
+     * Then moves the file to destination directory.
+     * If the directory does not exist, it attempts to create it.
      *
      * @param UploadedFile $uploadedFile
-     * @param AsciiSlugger $slugger Generates URL-friendly file name
      *
      * @return string Unique and safe final file name
      */
@@ -55,6 +67,7 @@ class VideoUploader
             @mkdir($folderPath, 0777, true);
         }
 
+        //TODO: Exception if file can't be moved?
         $uploadedFile->move($folderPath, $finalFileName);
 
         return $finalFileName;

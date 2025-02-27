@@ -14,6 +14,13 @@ class DeleteVideoController extends FrameworkBundleAdminController
 {
     /**
      * @Route("/productvideoloops/delete-video/{idProduct}", name="productvideoloops_delete_video", methods={"GET"})
+     * 
+     * Deletes a video associated with the specified product ID, then redirects 
+     * user to the product edit page
+     * 
+     * @param Request $request
+     * 
+     * @return RedirectResponse
      */
     public function deleteVideoAction(Request $request): RedirectResponse
     {

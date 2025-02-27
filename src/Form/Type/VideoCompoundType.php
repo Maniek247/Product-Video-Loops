@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PrestaShop\Module\ProductVideoLoops\Form\Type;
 
 use Symfony\Component\Translation\TranslatorInterface;
@@ -14,16 +16,37 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * Compound form type that includes:
+ * - A file upload field
+ * - A hidden preview field
+ * - A hidden product ID
+ *
+ * A PRE_SUBMIT event listener fills in missing preview/product ID data 
+ * if a user attempts to upload an invalid file (to not lose the old preview)
+ */
 class VideoCompoundType extends AbstractType
 {
+    /**
+     * @var TranslatorInterface
+     */
     private $translator;
 
+    /**
+     * @param TranslatorInterface $translator
+     */
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     *
+     * @return void
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $previewHtml = $options['data']['preview'] ?? '';
         $productId = $options['product_id'];
@@ -74,7 +97,12 @@ class VideoCompoundType extends AbstractType
         });
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    /**
+     * @param OptionsResolver $resolver
+     *
+     * @return void
+     */
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'product_id' => null,
@@ -82,12 +110,22 @@ class VideoCompoundType extends AbstractType
         ]);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    /**
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     *
+     * @return void
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['custom_label'] = $options['custom_label'];
     }
 
-    public function getBlockPrefix()
+    /**
+     * @return string
+     */
+    public function getBlockPrefix(): string
     {
         return 'video_compound';
     }

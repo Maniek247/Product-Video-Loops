@@ -15,8 +15,15 @@ final class ProductsListingHookSubscriber
      */
     private $queryHandler;
 
+    /**
+     * @var LinkBuilderService
+     */
     private $linkBuilderService;
 
+    /**
+     * @param GetProductVideoQueryHandler $queryHandler
+     * @param LinkBuilderService $linkBuilderService
+     */
     public function __construct(GetProductVideoQueryHandler $queryHandler, 
         LinkBuilderService $linkBuilderService
     ){
@@ -25,9 +32,14 @@ final class ProductsListingHookSubscriber
     }
 
     /**
-     * ActionPresentProductListing hook logic
+     * Modifies the presented product data by adding video information if available.
+     * 
+     * This method is triggered by the ActionPresentProductListing hook. It checks if the presented 
+     * product has an associated video and, if so, modifies its cover data to include video
      *
-     * @param array $params
+     * @param array $params An associative array containing the presented product data.
+     * 
+     * @return void
      */
     public function onActionPresentProductListing(array $params): void
     {
@@ -49,9 +61,7 @@ final class ProductsListingHookSubscriber
         $folderUrl = $this->linkBuilderService->buildVideoURL();
         $videoUrl = $folderUrl . $productVideo->filename;
 
-        /*  
-        $presentedProduct is an object so we can't modify it as a typical array
-        Insted of it use temporary array */
+        // Clone cover array to modify it, as $presentedProduct is an LazyArray object
         $cover = $presentedProduct['cover'];
 
         $cover['is_video'] = true;

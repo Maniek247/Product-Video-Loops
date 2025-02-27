@@ -25,6 +25,7 @@ class ProductVideoLoops extends Module
         $this->author = 'Adam Mańko';
         $this->version = '1.0.0';
         $this->ps_versions_compliancy = ['min' => '8.1.0', 'max' => _PS_VERSION_];
+        $this->tab = 'front_office_features';
 
         parent::__construct();
 
@@ -71,9 +72,11 @@ class ProductVideoLoops extends Module
     }
 
     /**
-     * Modify product form builder
+     * Modifise product form builder
      *
      * @param array $params
+     * 
+     * @return void
      */
     public function hookActionProductFormBuilderModifier(array $params): void
     {
@@ -85,9 +88,11 @@ class ProductVideoLoops extends Module
     }
 
     /**
-     * Modifies product data before page final render.
+     * Modifies product data before page final render
      *
      * @param array $params
+     * 
+     * @return void
      */
     public function hookActionPresentProduct(array $params): void
     {
@@ -101,9 +106,11 @@ class ProductVideoLoops extends Module
     }
 
     /**
-     * Modifies product data before page final render.
+     * Modifies product listing data before page final render
      *
      * @param array $params
+     * 
+     * @return void
      */
     public function hookActionPresentProductListing(array $params): void
     {
@@ -117,9 +124,7 @@ class ProductVideoLoops extends Module
     }
 
     /**
-     * Register BO CSS file
-     *
-     * @param array $params
+     * @return void
      */
     public function hookActionAdminControllerSetMedia(): void
     {
@@ -127,9 +132,7 @@ class ProductVideoLoops extends Module
     }
 
     /**
-     * Register FO CSS file
-     *
-     * @param array $params
+     * @return void
      */
     public function hookActionFrontControllerSetMedia(): void
     {

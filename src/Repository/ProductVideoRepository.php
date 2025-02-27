@@ -9,18 +9,26 @@ use PrestaShop\Module\ProductVideoLoops\Factory\ProductVideoFactory;
 
 final class ProductVideoRepository
 {
+    /**
+     * @var ProductVideoFactory
+     */
     private $videoFactory;
 
+    /**
+     * @param ProductVideoFactory $videoFactory
+     */
     public function __construct(ProductVideoFactory $videoFactory)
     {
         $this->videoFactory = $videoFactory;
     }
 
     /**
-     * Save video to database
-     * 
+     * Saves (creates or updates) the product video information in the database
+     *
      * @param int $productId
-     * @param string $fileName
+     * @param string $filename
+     *
+     * @return void
      */
     public function saveVideoInfoToDb(int $productId, string $filename): void
     {
@@ -42,9 +50,16 @@ final class ProductVideoRepository
         }
     }
 
+    /**
+     * Retrieves the ProductVideo entity for a given product ID
+     *
+     * @param int $productId
+     *
+     * @return ProductVideo|null The ProductVideo entity if found, null otherwise
+     */
     public function getProductVideo(int $productId): ?ProductVideo
     {
-        $video = $this->videoFactory->createProductVideo($productId); //TODO: decide to use factory or not
+        $video = $this->videoFactory->createProductVideo($productId);
         
         if (empty($video->id)) {
             return null;
@@ -53,9 +68,16 @@ final class ProductVideoRepository
         return $video;
     }
 
+    /**
+     * Deletes video information from database for a given product ID
+     *
+     * @param int $productId
+     *
+     * @return void
+     */
     public function deleteVideoInfoFromDb(int $productId): void
     {
-        $video = new ProductVideo($productId); //TODO: decide to use factory or not
+        $video = $this->videoFactory->createProductVideo($productId);
         if (!empty($video->id)) {
             $video->delete();
         }

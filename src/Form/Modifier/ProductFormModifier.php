@@ -6,14 +6,13 @@ namespace PrestaShop\Module\ProductVideoLoops\Form\Modifier;
 
 use PrestaShop\PrestaShop\Core\Domain\Product\ValueObject\ProductId;
 use PrestaShopBundle\Form\FormBuilderModifier;
-use PrestaShop\Module\ProductVideoLoops\Form\Type\VideoCompoundType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use PrestaShop\Module\ProductVideoLoops\Form\Type\VideoCompoundType;
 use PrestaShop\Module\ProductVideoLoops\Service\ProductVideoPreviewService;
 
 final class ProductFormModifier
 {
-    private $videoFactory;
     /**
      * @var TranslatorInterface
      */
@@ -24,7 +23,7 @@ final class ProductFormModifier
      */
     private $formBuilderModifier;
 
-       /**
+    /**
      * @var ProductVideoPreviewService
      */
     private $videoPreviewService;
@@ -57,6 +56,8 @@ final class ProductFormModifier
     }
 
     /**
+     * Adds video_block after images in description tab in product edit BO page
+     * 
      * @param FormBuilderInterface $productFormBuilder
      *
      * @see AddProductVideoCommandHandler to check how the field is handled on form POST

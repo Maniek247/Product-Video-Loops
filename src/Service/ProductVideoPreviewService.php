@@ -9,11 +9,20 @@ use PrestaShop\Module\ProductVideoLoops\Service\LinkBuilderService;
 
 class ProductVideoPreviewService
 {
-
+    /**
+     * @var ProductVideoFactory
+     */
     private $videoFactory;
 
+    /**
+     * @var LinkBuilderService
+     */
     private $linkBuilderService;
 
+    /**
+     * @param ProductVideoFactory $videoFactory
+     * @param LinkBuilderService $linkBuilderService
+     */
     public function __construct(ProductVideoFactory $videoFactory, LinkBuilderService $linkBuilderService)
     {
         $this->videoFactory = $videoFactory;
@@ -21,11 +30,13 @@ class ProductVideoPreviewService
     }
 
     /**
-     * Generate HTML with video linked to product ID
+     * Generates an HTML snippet to preview a video associated with a given product ID
      *
-     * @param $productId
+     * If no video is available for the product, returns an empty string
      *
-     * @return string HTML video code
+     * @param int $productId
+     *
+     * @return string HTML snippet for video preview
      */
     public function getPreviewHtml(int $productId): string
     {
@@ -39,7 +50,6 @@ class ProductVideoPreviewService
 
         $html = '<video width="auto" height="200" autoplay playsinline muted loop>
                 <source src="' . $videoUrl . '" type="video/mp4" />
-                Twoja przeglądarka nie wspiera wyświetlania wideo.
         </video>';
 
         return $html;
