@@ -3,7 +3,7 @@
     <name>productvideoloops</name>
     <displayName><![CDATA[Product Video Loops]]></displayName>
     <version><![CDATA[1.0.0]]></version>
-    <description><![CDATA[Set video loop as a product cover. Video loop will be displayed in catalog and product pages.]]></description>
+    <description><![CDATA[Ustaw krótki zapętlony film jako okładkę produktu. Film będzie wyświetlany na stronach katalogowych i produktowych.]]></description>
     <author><![CDATA[Adam Mańko]]></author>
     <tab><![CDATA[front_office_features]]></tab>
     <is_configurable>0</is_configurable>
