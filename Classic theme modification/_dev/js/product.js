@@ -1,27 +1,3 @@
-/**
- * Copyright since 2007 PrestaShop SA and Contributors
- * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License 3.0 (AFL-3.0)
- * that is bundled with this package in the file LICENSE.md.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/AFL-3.0
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to https://devdocs.prestashop.com/ for more information.
- *
- * @author    PrestaShop SA and Contributors <contact@prestashop.com>
- * @copyright Since 2007 PrestaShop SA and Contributors
- * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
- */
 import $ from 'jquery';
 import prestashop from 'prestashop';
 import ProductSelect from './components/product-select';
@@ -29,101 +5,34 @@ import updateSources from './components/update-sources';
 
 
 $(document).ready(() => {
- /* function coverImage() {
-    const productCover = $(prestashop.themeSelectors.product.cover);
-    const modalProductCover = $(prestashop.themeSelectors.product.modalProductCover);
-    let thumbSelected = $(prestashop.themeSelectors.product.selected);
-
-    const swipe = (selectedThumb, thumbParent) => {
-      const newSelectedThumb = thumbParent.find(prestashop.themeSelectors.product.thumb);
-
-    $(prestashop.themeSelectors.product.thumb).on('click', (event) => {
-      event.preventDefault();
-
-      // Swap active classes on thumbnail
-      selectedThumb.removeClass('selected');
-      newSelectedThumb.addClass('selected');
-
-      // Update sources of both cover and modal cover
-      modalProductCover.prop('src', newSelectedThumb.data('image-large-src'));
-      productCover.prop('src', newSelectedThumb.data('image-medium-src'));
-
-      // Get data from thumbnail and update cover src, alt and title
-      productCover.attr('title', newSelectedThumb.attr('title'));
-      modalProductCover.attr('title', newSelectedThumb.attr('title'));
-      productCover.attr('alt', newSelectedThumb.attr('alt'));
-      modalProductCover.attr('alt', newSelectedThumb.attr('alt'));
-
-      // Get data from thumbnail and update cover sources
-      updateSources(productCover, newSelectedThumb.data('image-medium-sources'));
-      updateSources(modalProductCover, newSelectedThumb.data('image-large-sources'));
-    };
-
-    $(prestashop.themeSelectors.product.thumb).on('click', (event) => {
-      thumbSelected = $(prestashop.themeSelectors.product.selected);
-      swipe(thumbSelected, $(event.target).closest(prestashop.themeSelectors.product.thumbContainer));
-    });
-
-    productCover.swipe({
-      swipe: (event, direction) => {
-        thumbSelected = $(prestashop.themeSelectors.product.selected);
-        const parentThumb = thumbSelected.closest(prestashop.themeSelectors.product.thumbContainer);
-
-        if (direction === 'right') {
-          if (parentThumb.prev().length > 0) {
-            swipe(thumbSelected, parentThumb.prev());
-          } else if (parentThumb.next().length > 0) {
-            swipe(thumbSelected, parentThumb.next());
-          }
-        } else if (direction === 'left') {
-          if (parentThumb.next().length > 0) {
-            swipe(thumbSelected, parentThumb.next());
-          } else if (parentThumb.prev().length > 0) {
-            swipe(thumbSelected, parentThumb.prev());
-          }
-        }
-      },
-      allowPageScroll: 'vertical',
-    });
-  } */
-
   function coverImage() {
     let $productCover = $(prestashop.themeSelectors.product.cover);
   
     $(prestashop.themeSelectors.product.thumb).on('click', (event) => {
       event.preventDefault();
   
-      // 1. zdejmij .selected ze wszystkich miniaturek
       $(prestashop.themeSelectors.product.thumb).removeClass('selected');
-      // 2. załóż .selected na klikniętą
       const $target = $(event.currentTarget);
       $target.addClass('selected');
   
-      // 3. sprawdź, czy data-is-video:
       const $thumbContainer = $target.closest('.thumb-container');
       const isVideo = $thumbContainer.data('is-video') === 1;
 
       $productCover = $(prestashop.themeSelectors.product.cover);
   
       if (isVideo) {
-        // Podmień <img> => <video>
-        const videoUrl = $target.attr('src'); // lub data('video-large')
-        // Sprawdź, czy .product-cover jest <video> czy <img>:
+        const videoUrl = $target.attr('src');
         if ($productCover.is('img')) {
-          // stwórz <video> i zamień
           const $video = $('<video class="js-qv-product-cover product-cover-video" autoplay playsinline muted loop>');
           $video.attr('src', videoUrl);
   
           $productCover.replaceWith($video);
-          $productCover = $video; // <--- aktualizujemy referencję
+          $productCover = $video;
         } else {
-          // jeśli to już <video>, tylko zmieniamy src
           $productCover.attr('src', videoUrl);
           }
         } else {
-        // standardowy obrazek
         const mediumSrc = $target.data('image-medium-src');
-        // Sprawdź, czy .product-cover jest <video> i zamień na <img>
         if ($productCover.is('video')) {
           const $img = $('<img class="js-qv-product-cover img-fluid"/>');
           $img.attr('src', mediumSrc);
@@ -137,7 +46,6 @@ $(document).ready(() => {
           $productCover.attr('alt', $target.attr('alt'));
           $productCover.attr('title', $target.attr('title'));
         }
-        // updateSources
         updateSources($productCover, $target.data('image-medium-sources'));
       }
     });

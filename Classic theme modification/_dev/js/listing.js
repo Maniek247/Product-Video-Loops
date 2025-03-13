@@ -1,27 +1,3 @@
-/**
- * Copyright since 2007 PrestaShop SA and Contributors
- * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License 3.0 (AFL-3.0)
- * that is bundled with this package in the file LICENSE.md.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/AFL-3.0
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to https://devdocs.prestashop.com/ for more information.
- *
- * @author    PrestaShop SA and Contributors <contact@prestashop.com>
- * @copyright Since 2007 PrestaShop SA and Contributors
- * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
- */
 import $ from 'jquery';
 import prestashop from 'prestashop';
 // eslint-disable-next-line
@@ -59,15 +35,12 @@ const productConfig = (qv) => {
   const $arrows = $(prestashop.themeSelectors.product.arrows);
   const $thumbnails = qv.find('.js-qv-product-images');
 
-  // Zmodyfikowany handler kliknięcia miniaturki:
   $(prestashop.themeSelectors.product.thumb).on('click', (event) => {
     event.preventDefault();
 
-    // Usuń klasę selected ze wszystkich miniaturek i dodaj ją do aktualnie klikniętego elementu
     $(prestashop.themeSelectors.product.thumb).removeClass('selected');
     $(event.currentTarget).addClass('selected');
 
-    // Pobierz informacje o miniaturce
     const $thumbContainer = $(event.currentTarget).closest('.thumb-container');
     const isVideo = $thumbContainer.data('is-video') === 1;
     const videoUrl = $(event.currentTarget).data('video-url');
@@ -76,13 +49,10 @@ const productConfig = (qv) => {
     const titleText = $(event.target).attr('title');
     const sources = $(event.target).data('image-large-sources');
 
-    // Znajdź element cover (okładkę) – który może być <img> lub <video>
     let $cover = $(prestashop.themeSelectors.product.cover);
 
     if (isVideo) {
-      // Jeśli miniaturka wskazuje, że to video:
       if ($cover.is('img')) {
-        // Jeśli obecnie jest <img>, to stwórz nowy element <video>
         const $video = $('<video>', {
           class: 'js-qv-product-cover product-cover-modal img-fluid',
           autoplay: true,
@@ -91,17 +61,13 @@ const productConfig = (qv) => {
           loop: true,
         });
         $video.attr('src', videoUrl);
-        // Opcjonalnie możesz ustawić title i alt – choć dla wideo nie mają one tak dużego znaczenia
         $cover.replaceWith($video);
         $cover = $video;
       } else {
-        // Jeśli już jest <video>, po prostu zaktualizuj atrybut src
         $cover.attr('src', videoUrl);
       }
     } else {
-      // Jeśli to obraz:
       if ($cover.is('video')) {
-        // Jeśli obecnie jest <video>, to stwórz nowy element <img>
         const $img = $('<img>', {
           class: 'js-qv-product-cover product-cover-modal img-fluid',
         });
@@ -111,13 +77,11 @@ const productConfig = (qv) => {
         $cover.replaceWith($img);
         $cover = $img;
       } else {
-        // Jeśli już jest <img>, po prostu zaktualizuj atrybuty
         $cover.attr('src', largeSrc);
         $cover.attr('alt', altText);
         $cover.attr('title', titleText);
       }
     }
-    // Zaktualizuj źródła (np. webp/avif) jeśli są dostępne
     updateSources($cover, sources);
   });
 
@@ -246,7 +210,6 @@ $(document).ready(() => {
     window.scrollTo(0, 0);
   });
 
-  // Quick View – zdarzenie otwarcia
   prestashop.on('clickQuickView', (elm) => {
     const data = {
       action: 'quickview',
@@ -303,7 +266,6 @@ $(document).ready(() => {
     },
   );
 
-  // Przykładowe parsowanie URL dla facety
   const parseSearchUrl = function (event) {
     if (event.target.dataset.searchUrl !== undefined) {
       return event.target.dataset.searchUrl;
@@ -314,7 +276,6 @@ $(document).ready(() => {
     return $(event.target).parent()[0].dataset.searchUrl;
   };
 
-  // Przykładowa aktualizacja listy produktów
   function updateProductListDOM(data) {
     $(prestashop.themeSelectors.listing.searchFilters).replaceWith(
       data.rendered_facets,
